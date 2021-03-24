@@ -1,4 +1,5 @@
 *.o
+!uapi/*.o
 *.d
 *.su
 *.sw[pno]
