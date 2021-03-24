@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for STM32CubeU5 HAL and LL drivers</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-stm32cubeu5-hal-and-ll-drivers">Release Notes for <mark>STM32CubeU5 HAL and LL drivers</mark></h1>
+<p>Copyright ©  2020 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="license">License</h1>
+<p>This software component is licensed by ST under BSD 3-Clause license, the “License”; You may not use this component except in compliance with the License. You may obtain a copy of the License at:</p>
+<p><a href="https://opensource.org/licenses/BSD-3-Clause" class="uri">https://opensource.org/licenses/BSD-3-Clause</a></p>
+<h1 id="purpose">Purpose</h1>
+<p>The STM32Cube HAL and LL, an STM32 abstraction layer embedded software, ensure maximized portability across STM32 portfolio.</p>
+<p>The portable APIs layer provides a generic, multi instanced and simple set of APIs to interact with the upper layer (application, libraries and stacks). It is composed of native and extended APIs set. It is directly built around a generic architecture and allows the build-upon layers, like the middleware layer, to implement its functions without knowing in-depth the used STM32 device. This improves the library code reusability and guarantees an easy portability on other devices and STM32 families.</p>
+<p>The Low Layer (LL) drivers are part of the STM32Cube firmware HAL that provides a basic set of optimized and one shot services. The Low layer drivers, contrary to the HAL ones are not fully portable across the STM32 families; the availability of some functions depends on the physical availability of the relative features on the product. The Low Layer (LL) drivers are designed to offer the following features:</p>
+<ul>
+<li>New set of inline functions for direct and atomic register access</li>
+<li>One-shot operations that can be used by the HAL drivers or from application level</li>
+<li>Full independence from HAL and standalone usage (without HAL drivers)</li>
+<li>Full features coverage of all the supported peripherals</li>
+</ul>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" checked aria-hidden="true"> <label for="collapse-section6" checked aria-hidden="true"><strong>V0.6.0 / 03-November-2020</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<ul>
+<li>Second beta release of all <strong>HAL and LL drivers</strong> for <strong>STM32U575xx / STM32U585xx</strong> devices (<strong>API Freeze</strong>)</li>
+<li>Add new LL driver for Delayblock</li>
+<li>Ensure static analysis check for almost HAL/LL drivers (MISRA C-2012, MCUAstyle and CodeSpell)</li>
+</ul>
+<h3 id="hal-drivers-updates"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Implement Deep Power Down mode and VREF+ protection when multiple ADCs are working simultaneously</li>
+</ul></li>
+<li><strong>HAL CORTEX</strong> driver
+<ul>
+<li>Fix wrong definition of SYSTICK_CLKSOURCE_HCLK define</li>
+</ul></li>
+<li><strong>HAL DMA</strong> driver
+<ul>
+<li>Remove state check on HAL_DMA_ConfigChannelAttributes() API in HAL driver</li>
+<li>Fix false value in HAL_DMAEx_List_GetNodeConfig() API in HAL driver</li>
+</ul></li>
+<li><strong>HAL FLASH</strong> driver
+<ul>
+<li>Remove of PCROP Feature</li>
+<li>Fix Option byte reading: NSBOOTADD0 and NSBOOTADD1</li>
+<li>Update FLASH_SIZE_DATA_REGISTER define value</li>
+</ul></li>
+<li><strong>HAL FMAC</strong> driver
+<ul>
+<li>Replace HAL_TIMEOUT and HAL_BUSY by HAL_ERROR in FMAC driver</li>
+</ul></li>
+<li><strong>HAL I2C</strong> driver
+<ul>
+<li>Remove HAL_I2CEx_EnableFastModePlus &amp; HAL_I2CEx_DisableFastModePlus APIs</li>
+<li>Add HAL_I2CEx_ConfigFastModePlus API</li>
+<li>Remove I2C_FASTMODEPLUS_PB6, I2C_FASTMODEPLUS_PB7, I2C_FASTMODEPLUS_PB8 and I2C_FASTMODEPLUS_PB9 Defines</li>
+<li>Add I2C_FASTMODEPLUS_ENABLE &amp; I2C_FASTMODEPLUS_DISABLE Defines</li>
+</ul></li>
+<li><strong>HAL LPGPIO</strong> driver
+<ul>
+<li>Change of LPGPIO index from LPGPIOA to LPGPIO1</li>
+</ul></li>
+<li><strong>HAL OCTOSPI</strong> driver
+<ul>
+<li>Add the new APIs HAL_OSPI_DLYB_SetConfig, HAL_OSPI_DLYB_GetConfig and HAL_OSPI_DLYB_GetClockPeriod using ll_DLYB</li>
+</ul></li>
+<li><strong>HAL PKA</strong> driver
+<ul>
+<li>Rename the API HAL_PKA_ModExpProctectMode to HAL_PKA_ModExpProtectMode</li>
+<li>Rename the API HAL_PKA_ModExpProctectMode_IT to HAL_PKA_ModExpProtectMode_IT</li>
+</ul></li>
+<li><strong>HAL RTC</strong> driver
+<ul>
+<li>Rename the structure rtcSecureFeatures to rtcNonSecureFeatures</li>
+<li>Add the following new Defines to configure security attribute of RTC feature:
+<ul>
+<li>RTC_NONSECURE_FEATURE_NONE</li>
+<li>RTC_NONSECURE_FEATURE_INIT</li>
+<li>RTC_NONSECURE_FEATURE_CAL</li>
+<li>RTC_NONSECURE_FEATURE_TS</li>
+<li>RTC_NONSECURE_FEATURE_WUT</li>
+<li>RTC_NONSECURE_FEATURE_ALRA</li>
+<li>RTC_NONSECURE_FEATURE_ALRB</li>
+<li>RTC_NONSECURE_FEATURE_ALL</li>
+</ul></li>
+<li>Remove the following Defines of RTC feature:
+<ul>
+<li>RTC_SECURE_FEATURE_NONE</li>
+<li>RTC_SECURE_FEATURE_INIT</li>
+<li>RTC_SECURE_FEATURE_CAL</li>
+<li>RTC_SECURE_FEATURE_TS</li>
+<li>RTC_SECURE_FEATURE_WUT</li>
+<li>RTC_SECURE_FEATURE_ALRA</li>
+<li>RTC_SECURE_FEATURE_ALRB</li>
+<li>RTC_SECURE_FEATURE_ALL</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL SMBUS</strong> driver
+<ul>
+<li>Remove HAL_SMBUSEx_EnableFastModePlus &amp; HAL_SMBUSEx_DisableFastModePlus APIs</li>
+<li>Add HAL_SMBUSEx_ConfigFastModePlus API</li>
+<li>Remove SMBUS_FASTMODEPLUS_PB6, SMBUS_FASTMODEPLUS_PB7, SMBUS_FASTMODEPLUS_PB8, SMBUS_FASTMODEPLUS_PB9 Defines</li>
+<li>Add SMBUS_FASTMODEPLUS_ENABLE &amp; SMBUS_FASTMODEPLUS_DISABLE Defines</li>
+</ul></li>
+<li><strong>HAL SPI</strong> driver
+<ul>
+<li>Update crc_length initialization inside SPI_Init API</li>
+<li>Remove __HAL_SPI_ENABLE macro call from HAL_SPIEx_SetConfigAutonomousMode API</li>
+<li>Add the check of circular mode in HAL_SPI_Transmit_DMA API</li>
+</ul></li>
+<li><strong>HAL TIM</strong> driver
+<ul>
+<li>Fix an issue in HAL_TIM_DMABurst_Read/Write to stop returns HAL_ERROR when called while DMA transfer is completed</li>
+<li>Fix an issue in HAL_TIM_xxx_Start* APIs that systematically access to register even if the instance cannot be used as slave timer</li>
+</ul></li>
+<li><strong>HAL UART</strong> driver
+<ul>
+<li>Add the following new APIs to support receive to Idle feature
+<ul>
+<li>HAL_UARTEx_ReceiveToIdle</li>
+<li>HAL_UARTEx_ReceiveToIdle_IT</li>
+<li>HAL_UARTEx_ReceiveToIdle_DMA</li>
+<li>HAL_UART_RegisterRxEventCallback</li>
+<li>HAL_UART_UnRegisterRxEventCallback</li>
+<li>HAL_UARTEx_RxEventCallback</li>
+</ul></li>
+<li>Add the following new Defines to support receive to Idle feature
+<ul>
+<li>HLAL_UART_RECEPTION_STANDARD</li>
+<li>HAL_UART_RECEPTION_TOIDLE</li>
+<li>HAL_UART_RECEPTION_TORTO</li>
+<li>HAL_UART_RECEPTION_TOCHARMATCH</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL USART</strong> driver
+<ul>
+<li>Remove the define USART_OVERSAMPLING_16</li>
+<li>Remove the define USART_OVERSAMPLING_8</li>
+<li>Remove the macro IS_USART_OVERSAMPLING</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL DLYB</strong> driver
+<ul>
+<li>Add new APIs for Delayblock LL driver LL_DLYB_SetDelay, LL_DLYB_GetDelay and LL_DLYB_GetClockPeriod</li>
+</ul></li>
+<li><strong>LL DMA</strong> driver
+<ul>
+<li>Add LL_DMA_ListStructInit() in LL driver</li>
+<li>Add LL_DMA_List_DeInit() in LL driver</li>
+<li>Add LL_DMA_List_Init() in LL driver</li>
+</ul></li>
+<li><strong>LL LPTIM</strong> driver
+<ul>
+<li>Add LL APIs to handle channels enabling</li>
+<li>Fix LL Input channel configuration issue</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<ul>
+<li>DCMI: In case of Buffer size &gt; 0xFFFF, do not stop continuous capture otherwise nodes synchronization is lost and the frame will be corrupted</li>
+</ul>
+<h2 id="backward-compatibility">Backward compatibility</h2>
+<ul>
+<li>Rename LPGPIOA instance to LPGPIO1</li>
+<li>Remove USART_OVERSAMPLING_16, USART_OVERSAMPLING_8 and IS_USART_OVERSAMPLING Defines from USART</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" checked aria-hidden="true"><strong>V0.5.0 / 10-July-2020</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<ul>
+<li>First beta release of <strong>HAL and LL drivers</strong> for <strong>STM32U575xx / STM32U585xx</strong> devices (<strong>API Freeze candidate</strong>)</li>
+<li>Add LL drivers for SPI and UCPD peripherals</li>
+<li>Add HAL driver for MDF/ADF peripherals</li>
+<li>Ensure static analysis check for almost HAL/LL drivers (MISRA C-2012, MCUAstyle and CodeSpell)</li>
+</ul>
+<h3 id="hal-drivers-updates-1"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li>Add the support of the MDF and ADF through a common stm32u5xx_hal_mdf.c/.h driver</li>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Rename ADC2 instance to ADC4</li>
+<li>Rename ADC1_COMMON instance to ADC12_COMMON</li>
+<li>Remove ‘register’ storage class specifier</li>
+<li>Update the channels remap in HAL_ADC_ConfigChannel() API</li>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL COMP</strong> driver
+<ul>
+<li>Remove winoutMode field and add windowoutput field in COMP_InitTypeDef structure</li>
+<li>Remove COMP_WINOUTMODE_COMP_OUT, COMP_WINOUTMODE_COMP1_XOR_COMP2, COMP_FLAG_VALUE and COMP_FLAG_LOCK defines</li>
+<li>Rename NonInvertingInput field to InputPlus</li>
+<li>Rename InvertingInput field to InputMinus</li>
+<li>Add COMP_WINDOWMODE_COMP2_INPUT_PLUS_COMMON, COMP_WINDOWOUTPUT_EACH_COMP, COMP_WINDOWOUTPUT_COMP1, COMP_WINDOWOUTPUT_COMP2,COMP_WINDOWOUTPUT_BOTH and COMP_WINDOWMODE_COMP2 defines</li>
+</ul></li>
+<li><strong>HAL CORDIC</strong> driver
+<ul>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL CRYP</strong> driver
+<ul>
+<li>Add the support of SAES features within the CRYP driver</li>
+<li>Remove stm32u5xx_hal_saes.c/.h files</li>
+</ul></li>
+<li><strong>HAL DCACHE</strong> driver
+<ul>
+<li>Add the support of multiple instances through the add of Handle.</li>
+</ul></li>
+<li><strong>HAL DMA</strong> driver
+<ul>
+<li>Update DMA_InitTypeDef structure fields</li>
+<li>Remove DMA_LinkNodeTypeDef structure</li>
+<li>Remove DMA_LinkNodeConfTypeDef structure</li>
+<li>Add InitLinkedList and __DMA_QListTypeDef fields in DMA_HandleTypeDef</li>
+<li>Remove FirstLinkedListNodeAddress and LastLinkedListNodeAddress fields from DMA_HandleTypeDef</li>
+<li>Add HAL_DMA_ERROR_TO, HAL_DMA_ERROR_INVALID_CALLBACK And HAL_DMA_ERROR_NOT_SUPPORTED defines</li>
+<li>Update request list</li>
+<li>Add DMA_NORMAL define</li>
+<li>Remove Trigger defines</li>
+<li>Remove all data handling defines</li>
+<li>Add DMA_IT_TO define</li>
+<li>Replace DMA_PORT0 and DMA_PORT1 by DMA_SRC_ALLOCATED_PORT0, DMA_SRC_ALLOCATED_PORT1, DMA_DEST_ALLOCATED_PORT0 and DMA_DEST_ALLOCATED_PORT1 defines</li>
+<li>Remove link step mode defines.</li>
+<li>Add DMA_CHANNEL_ATTRIBUTE_UNLOCKED And DMA_CHANNEL_ATTRIBUTE_LOCKED defines</li>
+<li>Add __HAL_DMA_RESET_HANDLE_STATE() macro</li>
+<li>Remove __HAL_DMA_GET_FIFOL() macro</li>
+<li>Add HAL_DMA_LockChannelAttributes() API</li>
+<li>Add HAL_DMA_GetLockChannelAttributes() API</li>
+<li>Support trigger overrun feature</li>
+<li>Add DMA_DataHandlingConfTypeDef structure</li>
+<li>Add DMA_TriggerConfTypeDef structure</li>
+<li>Add DMA_RepeatBlockConfTypeDef structure</li>
+<li>Add HAL_DMA_QStateTypeDef structure</li>
+<li>Add DMA_NodeConfTypeDef structure</li>
+<li>Add DMA_NodeTypeDef structure</li>
+<li>Add DMA_QListTypeDef structure</li>
+<li>Add HAL_DMA_QUEUE_ERROR_NONE, HAL_DMA_QUEUE_ERROR_BUSY, HAL_DMA_QUEUE_ERROR_EMPTY, HAL_DMA_QUEUE_ERROR_UNSUPPORTED, HAL_DMA_QUEUE_ERROR_INVALIDTYPE, HAL_DMA_QUEUE_ERROR_OUTOFRANGE and HAL_DMA_QUEUE_ERROR_NOTFOUND defines</li>
+<li>Add DMA_LINKEDLIST_NORMAL And DMA_LINKEDLIST_CIRCULAR defines</li>
+<li>Add DMA_DATA_RIGHTALIGN_ZEROPADDED, DMA_DATA_RIGHTALIGN_LEFTTRUNC, DMA_DATA_RIGHTALIGN_SIGNEXT, DMA_DATA_LEFTALIGN_RIGHTTRUNC, DMA_DATA_PACK and DMA_DATA_UNPACK defines</li>
+<li>Add DMA_EXCHANGE_NONE, DMA_EXCHANGE_DEST_BYTE, DMA_EXCHANGE_DEST_HALFWORD and DMA_EXCHANGE_SRC_BYTE defines</li>
+<li>Add DMA_TRIG_POLARITY_MASKED, DMA_TRIG_POLARITY_RISING, DMA_TRIG_POLARITY_FALLING defines</li>
+<li>Add trigger list signals</li>
+<li>Add DMA_LPDMA_LINEAR_NODE, DMA_GPDMA_LINEAR_NODE And DMA_GPDMA_2D_NODE defines</li>
+<li>Add DMA_LINK_ALLOCATED_PORT0 And DMA_LINK_ALLOCATED_PORT defines</li>
+<li>Add DMA_LSM_FULL_EXECUTION And DMA_LSM_1LINK_EXECUTION defines</li>
+<li>Add HAL_DMAEx_List_Init() API</li>
+<li>Add HAL_DMAEx_List_DeInit() API</li>
+<li>Add HAL_DMAEx_List_Start() API</li>
+<li>Add HAL_DMAEx_List_Start_IT() API</li>
+<li>Remove HAL_DMAEx_LinkedList_CreateNode() API</li>
+<li>Remove HAL_DMAEx_LinkedList_AddNode() API</li>
+<li>Remove HAL_DMAEx_LinkedList_RemoveNode() API</li>
+<li>Remove HAL_DMAEx_LinkedList_EnableCircularMode() API</li>
+<li>Remove HAL_DMAEx_LinkedList_DisableCircularMode() API</li>
+<li>Add HAL_DMAEx_List_ResetQ() API</li>
+<li>Add HAL_DMAEx_List_BuildNode() API</li>
+<li>Add HAL_DMAEx_List_GetNodeConfig() API</li>
+<li>Add HAL_DMAEx_List_InsertNode() API</li>
+<li>Add HAL_DMAEx_List_InsertNode_Head() API</li>
+<li>Add HAL_DMAEx_List_InsertNode_Tail() API</li>
+<li>Add HAL_DMAEx_List_RemoveNode() API</li>
+<li>Add HAL_DMAEx_List_RemoveNode_Head() API</li>
+<li>Add HAL_DMAEx_List_RemoveNode_Tail() API</li>
+<li>Add HAL_DMAEx_List_ReplaceNode() API</li>
+<li>Add HAL_DMAEx_List_ReplaceNode_Head() API</li>
+<li>Add HAL_DMAEx_List_ReplaceNode_Tail() API</li>
+<li>Add HAL_DMAEx_List_InsertQ_Head() API</li>
+<li>Add HAL_DMAEx_List_InsertQ_Tail() API</li>
+<li>Add HAL_DMAEx_List_SetCircularModeConfig() API</li>
+<li>Add HAL_DMAEx_List_SetCircularMode() API</li>
+<li>Add HAL_DMAEx_List_ClearCircularMode() API</li>
+<li>Add HAL_DMAEx_List_ConvertQToDynamic() API</li>
+<li>Add HAL_DMAEx_List_ConvertQToStatic() API</li>
+<li>Add HAL_DMAEx_List_LinkQ() API</li>
+<li>Add HAL_DMAEx_List_UnLinkQ() API</li>
+<li>Add HAL_DMAEx_ConfigDataHandling() API</li>
+<li>Add HAL_DMAEx_ConfigTrigger() API</li>
+<li>Add HAL_DMAEx_ConfigRepeatBlock() API</li>
+<li>Add HAL_DMAEx_GetFifoLevel() API</li>
+</ul></li>
+<li><strong>HAL DCMI</strong> driver
+<ul>
+<li>Update DMA management (circular, double-buffering and normal modes)</li>
+<li>Update Buffer_size unit to be in number of words for HAL_DCMI_Start_DMA() API</li>
+</ul></li>
+<li><strong>HAL FMAC</strong> driver
+<ul>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL FMC</strong> driver
+<ul>
+<li>Update DMA management</li>
+<li>Update Buffer_size unit to be in number of words for HAL_SRAM_Read_DMA() and HAL_SRAM_Write_DMA() API</li>
+</ul></li>
+<li><strong>HAL GPIO</strong> driver
+<ul>
+<li>Add the support of LPGPIO features within the GPIO driver</li>
+<li>Remove stm32u5xx_hal_lpgpio.c/.h files<br />
+</li>
+</ul></li>
+<li><strong>HAL GTZC</strong> driver
+<ul>
+<li>Rename GTZC_PERIPH_DCACHE_REG define to GTZC_PERIPH_DCACHE1_REG</li>
+<li>Rename GTZC_PERIPH_ADC1 define to GTZC_PERIPH_ADC12</li>
+<li>Rename GTZC_PERIPH_OTGFS define to GTZC_PERIPH_OTG</li>
+<li>Rename GTZC_PERIPH_ADC2 define to GTZC_PERIPH_ADC4</li>
+<li>Replace HAL_GTZC_GET_ARRAY_INDEX() macro by HAL_GTZC_TZSC_GET_ARRAY_INDEX() and HAL_GTZC_TZIC_GET_ARRAY_INDEX()</li>
+</ul></li>
+<li><strong>HAL I2C</strong> driver
+<ul>
+<li>Add Autonomous Mode support</li>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL LPTIM</strong> driver
+<ul>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL OCTOSPI</strong> driver
+<ul>
+<li>Update DMA management</li>
+<li>Update HAL_OSPIM_Config() API to Fix the zero-initialized members of OSPIM_CfgTypeDef</li>
+</ul></li>
+<li><strong>HAL OPAMP</strong> driver
+<ul>
+<li>Add OPAMP_POWERMODE_NORMALPOWER_NORMALSPEED, OPAMP_POWERMODE_NORMALPOWER_HIGHSPEED, OPAMP_POWERMODE_LOWPOWER_NORMALSPEED and OPAMP_POWERMODE_LOWPOWER_HIGHSPEED defines</li>
+<li>Remove PowerSupplyRange field in OPAMP_InitTypeDef</li>
+<li>Remove OPAMP_POWERMODE_NORMAL, OPAMP_POWERMODE_LOWPOWER, OPAMP_POWERSUPPLY_LOW, OPAMP_POWERSUPPLY_HIGH, LL_OPAMP_POWERSUPPLY_RANGE_LOW, LL_OPAMP_POWERSUPPLY_RANGE_HIGH, LL_OPAMP_POWERMODE_NORMAL, LL_OPAMP_POWERMODE_LOWPOWER and OPAMP_CSR_HSM</li>
+</ul></li>
+<li><strong>HAL OTFDEC</strong> driver
+<ul>
+<li>Add __HAL_OTFDEC_GET_FLAG() and __HAL_OTFDEC_CLEAR_FLAG() macros</li>
+</ul></li>
+<li><strong>HAL PKA</strong> driver
+<ul>
+<li>Rename PKA_FLAG_OPERRF define to PKA_FLAG_OPERR</li>
+</ul></li>
+<li><strong>HAL PWR</strong> driver
+<ul>
+<li>Add HAL_PWREx_EnableRAMsContentRunRetention() API</li>
+<li>Add HAL_PWREx_DisableRAMsContentRunRetention() API</li>
+<li>Add PWR Extended SRAM Contents Run Retention defines</li>
+<li>Fix HAL_PWREx_S3WU_IRQHandler() API issue</li>
+<li>Rename WakeUpPinPolarity parameter to WakeUpPin in HAL_PWR_EnableWakeUpPin() API</li>
+<li>Rename WakeUpPinx parameter to WakeUpPin in HAL_PWR_DisableWakeUpPin() API</li>
+<li>Rename HAL_PWREx_EnableSRAM2ContentRetention() to HAL_PWREx_EnableSRAM2ContentStandbyRetention() API</li>
+<li>Rename HAL_PWREx_DisableSRAM2ContentRetention() to HAL_PWREx_DisableSRAM2ContentStandbyRetention() API</li>
+<li>Rename HAL_PWREx_EnableRAMsContentRetention () to HAL_PWREx_EnableRAMsContentStopRetention() API</li>
+<li>Rename HAL_PWREx_DisableRAMsContentRetention () to HAL_PWREx_DisableRAMsContentStopRetention () API</li>
+<li>Rename ResistorSelection To ResistorValue In the HAL_PWREx_EnableBatteryCharging() API</li>
+</ul></li>
+<li><strong>HAL RAMCFG</strong> driver
+<ul>
+<li>Rename PageNb parameter to NbPage in HAL_RAMCFG_EnableWriteProtection() API</li>
+</ul></li>
+<li><strong>HAL RCC</strong> driver
+<ul>
+<li>Add new SRAMxEN bits management</li>
+<li>Add new bus clock activation and deactivation management</li>
+<li>Add RCC_HSE_BYPASS_DIGITAL support</li>
+<li>Add macros to enable or disable LSE clock</li>
+<li>Add macro to set Low-speed clock (LSI) divider<br />
+</li>
+<li>Add power boost check in HAL_RCC_OscConfig() API</li>
+<li>Rename RCC_AHB4 bus to RCC_AHB2_2</li>
+<li>Rename GPDMA, DCACHE, LPGPIO, LPDMA macros to __HAL_RCC_GPDMA1_CLK_ENABLE(), __HAL_RCC_LPDMA1_CLK_ENABLE(), __HAL_RCC_DCACHE1_CLK_ENABLE() and __HAL_RCC_LPGPIO1_CLK_ENABLE()</li>
+<li>Remove all macros related to DTS</li>
+</ul></li>
+<li><strong>HAL RNG</strong> driver
+<ul>
+<li>Add new HAL_RNGEx_RecoverSeedError() API to recover from seed error in polling mode</li>
+</ul></li>
+<li><strong>HAL RTC</strong> driver
+<ul>
+<li>Add new HAL_RTCEx_BKUPBlock_Enable/Disable and HAL_RTCEx_Erase_SecretDev_Conf new APIs</li>
+<li>Support new tampers (Internal tamper 12/13)</li>
+<li>Remove all secure callbacks: ALARMA_Callbacks_S, ALARMB_Callbacks_S, Tamperx_Callbacks_S (x=1..8) and InternalTamperx_Callbacks_S(x=1..13)</li>
+<li>Remove Vcore Monitoring feature support</li>
+<li>Rename HAL_RTCEx_SetSwMasterKey() API to HAL_RTCEx_SetBoothardwareKey</li>
+</ul></li>
+<li><strong>HAL SAI</strong> driver
+<ul>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL SD/MMC</strong> driver
+<ul>
+<li>Add the power class management</li>
+<li>Update hard-coded clock dividers to work for all SDMMC frequencies</li>
+<li>Update the host voltage sequence</li>
+<li>Update the card address assignment</li>
+</ul></li>
+<li><strong>HAL SMBUS</strong> driver
+<ul>
+<li>Add SMBUS_FIRST_FRAME_WITH_PEC define</li>
+<li>Rename __SMBUS_HandleTypeDef structure to SMBUS_HandleTypeDef</li>
+</ul></li>
+<li><strong>HAL SPI</strong> driver
+<ul>
+<li>Update Autonomous Mode implementation</li>
+<li>Update DMA management</li>
+</ul></li>
+<li><strong>HAL TIM</strong> driver
+<ul>
+<li>Add Encoder Index Blanking feature</li>
+<li>Fix HSE/32 behaviour</li>
+<li>Update DMA management</li>
+<li>Update TIM ETR remap : ADC2 replaced by ADC4</li>
+<li>Update the order of disabling in HAL_TIM_IC_Stop_DMA() API</li>
+<li>Update HAL_TIM_DMABurst_(Read/Write)Stop behaviour to return HAL_ERROR when called while DMA transfer is completed</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-1"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL ADC</strong> driver
+<ul>
+<li>Update LL_ADC_REG_Init() API to set sequencer length only in case of sequencer mode fully configurable</li>
+<li>Fix CodeSpell, CHM, MISRA-2012 and MCUAstyle isues.</li>
+</ul></li>
+<li><strong>LL COMP</strong> driver
+<ul>
+<li>Add LL_COMP_WINDOWMODE_COMP_ODD_REGOFFSET_MASK, LL_COMP_WINDOWMODE_COMP_EVEN_REGOFFSET_MASK, LL_COMP_WINDOWMODE_COMPX_REGOFFSET_MASK, LL_COMP_WINDOWMODE_COMPX_SETTING_MASK, LL_COMP_WINDOWOUTPUT_COMPX_SETTING_MASK, LL_COMP_WINDOWOUTPUT_BOTH_SETTING_MASK, LL_COMP_WINDOWOUTPUT_BOTH_POS_VS_WINDOW and LL_COMP_WINDOWMODE_BITOFFSET_POS defines</li>
+</ul></li>
+<li><strong>LL DMA</strong> driver
+<ul>
+<li>Rename SrcAddr parameter to SrcAddress in LL_DMA_InitTypeDef structure</li>
+<li>Rename DestAddr parameter to DestAddress in LL_DMA_InitTypeDef structure</li>
+<li>Rename SrcAddrDec parameter to SrcAddrUpdateMode in LL_DMA_InitTypeDef structure</li>
+<li>Rename DestAddrDec parameter to DestAddrUpdateMode in LL_DMA_InitTypeDef structure</li>
+<li>Rename BlkRptSrcAddrDec parameter to BlkRptSrcAddrUpdateMode in LL_DMA_InitTypeDef structure</li>
+<li>Rename BlkRptDestAddrDec parameter to BlkRptDestAddrUpdateMode in LL_DMA_InitTypeDef structure</li>
+<li>Rename DestSec parameter to DestSecure in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename SrcSec parameter to SrcSecure in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename BlkReptDestAddrDec parameter to BlkReptDestAddrUpdate in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename BlkRptSrcAddrDec parameter to BlkRptSrcAddrUpdateMode in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename SrcAddrDec parameter to SrcAddrUpdateMode in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename DestAddrDec parameter to DestAddrUpdateMode in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename SrcAddr parameter to SrcAddress in LL_DMA_InitNodeTypeDef structure</li>
+<li>Rename DestAddr parameter to DestAddress in LL_DMA_InitNodeTypeDef structure</li>
+<li>Add LL_DMA_CLLR_OFFSET0, LL_DMA_CLLR_OFFSET1, LL_DMA_CLLR_OFFSET2, LL_DMA_CLLR_OFFSET3, LL_DMA_CLLR_OFFSET4,LL_DMA_CLLR_OFFSET5, LL_DMA_CLLR_OFFSET6 And LL_DMA_CLLR_OFFSET7</li>
+<li>Rename LL_DMA_EXCHANGE_DEST_HWORD_NONE define to LL_DMA_DEST_HALFWORD_PRESERVE</li>
+<li>Rename LL_DMA_EXCHANGE_DEST_HWORD define to LL_DMA_DEST_HALFWORD_EXCHANGE</li>
+<li>Rename LL_DMA_EXCHANGE_DEST_BYTE_NONE define to LL_DMA_DEST_BYTE_PRESERVE</li>
+<li>Rename LL_DMA_EXCHANGE_DEST_BYTE define to LL_DMA_DEST_BYTE_EXCHANGE</li>
+<li>Rename LL_DMA_EXCHANGE_SRC_BYTE_NONE define to LL_DMA_SRC_BYTE_PRESERVE</li>
+<li>Rename LL_DMA_EXCHANGE_SRC_BYTE define to LL_DMA_SRC_BYTE_EXCHANGE</li>
+<li>Rename LL_DMA_DINC_NOINCREMENT define to LL_DMA_DEST_FIXED</li>
+<li>Rename LL_DMA_DINC_INCREMENT define to LL_DMA_DEST_INCREMENT</li>
+<li>Rename LL_DMA_SINC_NOINCREMENT define to LL_DMA_SRC_FIXED</li>
+<li>Rename LL_DMA_SINC_INCREMENT define to LL_DMA_SRC_INCREMENT</li>
+<li>Rename LL_DMA_SRC_ADDR_INCREMENT define to LL_DMA_BURST_SRC_ADDR_INCREMENT</li>
+<li>Rename LL_DMA_SRC_ADDR_DECREMENT define to LL_DMA_BURST_SRC_ADDR_DECREMENT</li>
+<li>Rename LL_DMA_DEST_ADDR_INCREMENT define to LL_DMA_BURST_DEST_ADDR_INCREMENT</li>
+<li>Rename LL_DMA_DEST_ADDR_DECREMENT define to LL_DMA_BURST_DEST_ADDR_DECREMENT</li>
+<li>Rename LL_DMA_LPDMA_NODE define to LL_DMA_LPDMA_LINEAR_NODE</li>
+<li>Rename LL_DMA_GPDMA_LA_NODE define to LL_DMA_GPDMA_LINEAR_NODE</li>
+<li>Rename LL_DMA_GPDMA_2D_NODE define to LL_DMA_GPDMA_2D_NODE</li>
+<li>Rename LL_DMA_CTR1_UPDATE define to LL_DMA_UPDATE_CTR1</li>
+<li>Rename LL_DMA_CTR2_UPDATE define to LL_DMA_UPDATE_CTR2</li>
+<li>Rename LL_DMA_CBR1_UPDATE define to LL_DMA_UPDATE_CBR1</li>
+<li>Rename LL_DMA_CSAR_UPDATE define to LL_DMA_UPDATE_CSAR</li>
+<li>Rename LL_DMA_CDAR_UPDATE define to LL_DMA_UPDATE_CDAR</li>
+<li>Rename LL_DMA_CTR3_UPDATE define to LL_DMA_UPDATE_CTR3</li>
+<li>Rename LL_DMA_CBR2_UPDATE define to LL_DMA_UPDATE_CBR2</li>
+<li>Rename LL_DMA_CLLR_UPDATE define to LL_DMA_UPDATE_CLLR</li>
+<li>Align request list with reference manual</li>
+<li>Align trigger list with reference manual</li>
+<li>Rename LL_DMA_GET_CHANNEL_INDEX() to LL_DMA_GET_CHANNEL() API</li>
+<li>Add LL_DMA_DisableChannel() API</li>
+<li>Rename LL_DMA_ConfigDataTransfer() to LL_DMA_ConfigTransfer() API</li>
+<li>Rename LL_DMA_SetHardwareRequest() to LL_DMA_SetPeriphRequest() API</li>
+<li>Rename LL_DMA_GetHardwareRequest() to LL_DMA_GetPeriphRequest() API</li>
+<li>Rename LL_DMA_SetHardwareTrigger() to LL_DMA_SetHWTrigger() API</li>
+<li>Rename LL_DMA_GetHardwareTrigger() to LL_DMA_GetHWTrigger() API</li>
+<li>Rename LL_DMA_ConfigAddrsDec() to LL_DMA_ConfigBlkRptAddrUpdate() API</li>
+<li>Rename LL_DMA_SetBlkRptDestAddrDec() to LL_DMA_SetBlkRptDestAddrUpdate() API</li>
+<li>Rename LL_DMA_GetBlkRptDestAddrDec() to LL_DMA_GetBlkRptDestAddrUpdate() API</li>
+<li>Rename LL_DMA_SetBlkRptSrcAddrDec() to LL_DMA_SetBlkRptSrcAddrUpdate() API</li>
+<li>Rename LL_DMA_GetBlkRptSrcAddrDec() to LL_DMA_GetBlkRptSrcAddrUpdate() API</li>
+<li>Rename LL_DMA_SetDestAddrDec() to LL_DMA_SetDestAddrUpdate() API</li>
+<li>Rename LL_DMA_GetDestAddrDec() to LL_DMA_GetDestAddrUpdate() API</li>
+<li>Rename LL_DMA_SetSrcAddrDec() to LL_DMA_SetSrcAddrUpdate() API</li>
+<li>Rename LL_DMA_GetSrcAddrDec() to LL_DMA_GetSrcAddrUpdate() API</li>
+<li>Rename LL_DMA_ConfigAddrs() to LL_DMA_ConfigAddresses() API</li>
+<li>Rename LL_DMA_SetSrcAddr() to LL_DMA_SetSrcAddress() API</li>
+<li>Rename LL_DMA_GetSrcAddr() to LL_DMA_GetSrcAddress() API</li>
+<li>Rename LL_DMA_SetDestAddr() to LL_DMA_SetDestAddress() API</li>
+<li>Rename LL_DMA_GetDestAddr() to LL_DMA_GetDestAddress() API</li>
+<li>Rename LL_DMA_ConfigAddrsOffsetDec() to LL_DMA_ConfigAddrUpdateValue() API</li>
+<li>Rename LL_DMA_SetDestAddrOffsetDec() to LL_DMA_SetDestAddrUpdateValue() API</li>
+<li>Rename LL_DMA_GetDestAddrOffsetDec() to LL_DMA_GetDestAddrUpdateValue() API</li>
+<li>Rename LL_DMA_SetSrcAddrOffsetDec() to LL_DMA_SetSrcAddrUpdateValue() API</li>
+<li>Rename LL_DMA_GetSrcAddrOffsetDec() to LL_DMA_GetSrcAddrUpdateValue() API</li>
+<li>Rename LL_DMA_ConfigBlkRptAddrsOffsetDec() to LL_DMA_ConfigBlkRptAddrUpdateValue() API</li>
+<li>Rename LL_DMA_SetBlkRptDestAddrOffsetDec() to LL_DMA_SetBlkRptDestAddrUpdateValue() API</li>
+<li>Rename LL_DMA_GetBlkRptDestAddrOffsetDec() to LL_DMA_GetBlkRptDestAddrUpdateValue() API</li>
+<li>Rename LL_DMA_SetBlkRptSrcAddrOffsetDec() to LL_DMA_SetBlkRptSrcAddrUpdateValue() API</li>
+<li>Rename LL_DMA_GetBlkRptSrcAddrOffsetDec() to LL_DMA_GetBlkRptSrcAddrUpdateValue() API</li>
+<li>Rename LL_DMA_GetFIFOLLevel() to LL_DMA_GetFIFOLevel() API</li>
+<li>Add LL_DMA_EnableChannelLockAttribute() API</li>
+<li>Add LL_DMA_IsEnabledChannelLockAttribute() API</li>
+<li>Add LL_DMA_ClearFlag_TO() API</li>
+<li>Add LL_DMA_IsActiveFlag_TO() API</li>
+<li>Add LL_DMA_EnableIT_TO() API</li>
+<li>Add LL_DMA_DisableIT_TO() API</li>
+<li>Add LL_DMA_IsEnabledIT_TO() API</li>
+</ul></li>
+<li><strong>LL I2C</strong> driver
+<ul>
+<li>Add Autonomous Mode support</li>
+</ul></li>
+<li><strong>LL LPGPIO</strong> driver
+<ul>
+<li>Replace LPGPIO_Typedef by GPIO_Typedef</li>
+</ul></li>
+<li><strong>LL OPAMP</strong> driver
+<ul>
+<li>Add LL_OPAMP_POWERMODE_NORMALPOWER_NORMALSPEED, LL_OPAMP_POWERMODE_NORMALPOWER_HIGHSPEED, LL_OPAMP_POWERMODE_LOWPOWER_NORMALSPEED and LL_OPAMP_POWERMODE_LOWPOWER_HIGHSPEED</li>
+<li>Remove LL_OPAMP_POWERSUPPLY_RANGE_LOW, LL_OPAMP_POWERSUPPLY_RANGE_HIGH, LL_OPAMP_POWERMODE_NORMAL and LL_OPAMP_POWERMODE_LOWPOWER defines</li>
+<li>Remove __LL_OPAMP_COMMON_INSTANCE(), __LL_OPAMP_COMMON_INSTANCE(), __LL_OPAMP_IS_ENABLED_ALL_COMMON_INSTANCE() and __LL_OPAMP_IS_ENABLED_ALL_COMMON_INSTANCE() macros</li>
+<li>Remove LL_OPAMP_SetCommonPowerRange() and LL_OPAMP_GetCommonPowerRange() APIs</li>
+</ul></li>
+<li><strong>LL PWR</strong> driver
+<ul>
+<li>Add SRAM Contents Run Retention defines</li>
+<li>Add LL_PWR_SetSRAM1RunRetention(), LL_PWR_GetSRAM1RunRetention(), LL_PWR_SetSRAM2RunRetention(), LL_PWR_GetSRAM2RunRetention(), LL_PWR_SetSRAM3RunRetention(), LL_PWR_GetSRAM3RunRetention(), LL_PWR_SetSRAM4RunRetention() and LL_PWR_GetSRAM4RunRetention() API</li>
+</ul></li>
+<li><strong>LL TIM</strong> driver
+<ul>
+<li>Update LL_TIM_COUNTERMODE_CENTER_DOWN and LL_TIM_COUNTERMODE_CENTER_UP define value</li>
+<li>Add support of input capture</li>
+</ul></li>
+<li>Add <strong>LL SPI</strong> and <strong>LL UCPD</strong> drivers</li>
+</ul>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<ul>
+<li>VREF+ protection when multiple ADCs are working simultaneously is not implemented</li>
+<li>OCTOSPI HAL driver is not providing APIs for Delay Block (DLYB)</li>
+<li>DCMI: In case of Buffer size &gt; 0xFFFF, do not stop continuous capture otherwise nodes synchronization is lost and the frame will be corrupted</li>
+<li>CodeSonar static analysis is not done</li>
+</ul>
+<h2 id="backward-compatibility-1">Backward compatibility</h2>
+<ul>
+<li>Rework done on CRYP, DCACHE, DMA and GPIO driver is introducing compatibility break with HAL/LL drivers V0.4.0.</li>
+<li>LPGPIO and SAES driver are removed</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V0.4.0 / 17-April-2020</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<p>Fourth alpha release of <strong>HAL and LL drivers</strong> for <strong>STM32U575xx / STM32U585xx</strong> devices</p>
+<h3 id="hal-drivers-updates-2"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Update HAL_ADC_ConfigChannel() API to support:
+<ul>
+<li>Scan sequencer mechanisms for both ADC1 and ADC2</li>
+<li>Fix the internal channels sequencer for ADC2</li>
+<li>Fix the sampling time settings</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL CORTEX</strong> driver
+<ul>
+<li>Update HAL_SYSTICK_CLKSourceConfig() implementation to support LSE and LSI clock sources</li>
+</ul></li>
+<li><strong>HAL CRYP</strong> driver
+<ul>
+<li>Fix GCM encryption and decryption processing when shared key from SAES</li>
+</ul></li>
+<li><strong>HAL DAC</strong> driver
+<ul>
+<li>Add support of autonomous mode</li>
+</ul></li>
+<li><strong>HAL DMA</strong> driver
+<ul>
+<li>Change HAL_DMA_PollForTransfer() prototype</li>
+</ul></li>
+<li><strong>HAL FSMC</strong> driver
+<ul>
+<li>Update HAL_SRAM_Read_DMA() and HAL_SRAM_Write_DMA() APIs to calculate buffer size in bytes</li>
+</ul></li>
+<li><strong>HAL GPIO</strong> driver
+<ul>
+<li>Add support of HSLV feature</li>
+</ul></li>
+<li><strong>HAL GTZC</strong> driver
+<ul>
+<li>Update GTZC_PERIPH_FLASH and GTZC_PERIPH_FLASH_REG defines value</li>
+</ul></li>
+<li><strong>HAL PWR</strong> driver
+<ul>
+<li>Update overall driver functional description (doxygen comments)</li>
+<li>Update HAL_PWR_ConfigPVD(), HAL_PWREx_ConfigPVM(), HAL_PWREx_EnableFlashFastWakeUp(), HAL_PWREx_DisableFlashFastWakeUp() implementations</li>
+</ul></li>
+<li><strong>HAL RCC</strong> driver
+<ul>
+<li>Align peripheral defines naming with reference manual</li>
+<li>Add PLL1MBOOST configuration</li>
+</ul></li>
+<li><strong>HAL RAMCFG</strong> driver
+<ul>
+<li>Update register callback mechanism</li>
+</ul></li>
+<li><strong>HAL SAI</strong> driver
+<ul>
+<li>Update the check of circular mode</li>
+<li>Update size parameter in HAL_DMA_Start_IT() call</li>
+</ul></li>
+<li><strong>HAL SAES</strong> driver
+<ul>
+<li>Use SAES flags and parameters instead of CRYP ones</li>
+<li>Remove suspend/resume CRYP sequence from SAES (to be reworked)</li>
+</ul></li>
+<li><strong>HAL SDMMC</strong> driver
+<ul>
+<li>Add Linked-list Implementation</li>
+</ul></li>
+<li><strong>HAL SPI</strong> driver
+<ul>
+<li>Update the check of circular mode</li>
+</ul></li>
+<li><strong>HAL UART</strong> driver
+<ul>
+<li>Add support of autonomous mode</li>
+</ul></li>
+<li><strong>HAL USART</strong> driver
+<ul>
+<li>Add support of autonomous mode</li>
+</ul></li>
+</ul>
+<h3 id="ll-drivers-updates-2"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL BUS</strong> driver
+<ul>
+<li>Align OCTOSPIM, OCTOSPI1, OCTOSPI2, LPGPIO1 and FSMC defines naming with reference manual</li>
+</ul></li>
+<li><strong>LL DMA</strong> driver
+<ul>
+<li>Rework driver functional description (doxygen comments)</li>
+<li>Update LL_DMA_Init(), LL_DMA_DeInit() and LL_DMA_CreateLinkNode() implementations</li>
+<li>Change LL_DMA_CreateLinkNode() and LL_DMA_ConfigLinkUpdate() prototypes</li>
+<li>Rename LL_DMA_IsActiveFlag_HTF() API to LL_DMA_IsActiveFlag_HT()</li>
+<li>Add new LL_DMA_ConfigBlkCounters() API</li>
+</ul></li>
+<li><strong>LL GPIO</strong> driver
+<ul>
+<li>Add new APIs for HSLV feature</li>
+</ul></li>
+<li><strong>LL PWR</strong> driver
+<ul>
+<li>Overall driver reworked</li>
+</ul></li>
+<li><strong>LL RCC</strong> driver
+<ul>
+<li>Align peripheral defines naming with reference manual</li>
+<li>Update security defines naming</li>
+<li>Rename LL_RCC_SetSecureMode() and LL_RCC_GetSecureMode() APIs to respectively LL_RCC_ConfigSecure() and LL_RCC_GetConfigSecure()</li>
+</ul></li>
+<li>Add <strong>LL RTC</strong> driver</li>
+</ul>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<ul>
+<li>MDF/ADF HAL driver is not part of this Alpha Release</li>
+<li>UCPD and SPI LL drivers are not part of this Alpha Release</li>
+<li><strong>Almost provided API may be subject to update in the coming releases</strong>
+<ul>
+<li>DCache, DMA, SAES, GPIO and LPGPIO drivers are still under rework</li>
+<li>Support of LPBAM feature in SPI driver is not the final implementation</li>
+<li>I2C HAL driver and USART LL driver are not supporting LPBAM feature</li>
+<li>VREF+ protection when multiple ADCs are working simultaneously is not implemented</li>
+<li>DMA3 support to be enhanced in DCMI HAL driver</li>
+<li>LPTIM over capture is not working properly when using interrupt mode</li>
+<li>OCTOSPI HAL driver is not providing APIs for Delay Block (DLYB)</li>
+</ul></li>
+<li>MISRA-C 2012 compliance is not done</li>
+<li>Static code analysis is not done</li>
+</ul>
+<h2 id="backward-compatibility-2">Backward compatibility</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V0.3.0 / 21-February-2020</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<ul>
+<li>Third alpha release for STM32U5xxxx devices</li>
+<li>HAL and LL driver alpha version for most peripherals:
+<ul>
+<li><strong>HAL</strong>:
+<ul>
+<li>Add TSC, SmartCard and IrDa HAL drivers.</li>
+<li>Fix GCC compilation errors on COMP, MMC, PSSI, SPI, TIM, USART, LPTIM, RTC and CRYP drivers</li>
+<li>Update RCC driver to align with reference manual</li>
+</ul></li>
+<li><strong>LL</strong>:
+<ul>
+<li>Add drivers for ADC, DMA, PWR, UTILS</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-3">Known Limitations</h2>
+<ul>
+<li><strong>Provided HAL/LL drivers are still under validation on silicon</strong></li>
+<li>MDF/ADF HAL driver is not part of this Alpha Release</li>
+<li><strong>Almost provided API may be subject to update in the coming releases</strong>
+<ul>
+<li>I2C driver is not providing API for LPBAM features</li>
+<li>USART and UART LL drivers are not supporting all peripheral features</li>
+</ul></li>
+<li>MISRA-C 2012 compliance is not done</li>
+<li>Static code analysis is not done</li>
+</ul>
+<h2 id="backward-compatibility-3">Backward compatibility</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V0.2.0 / 20-December-2019</strong></label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<ul>
+<li>Second alpha release for STM32U5xxxx devices</li>
+<li>HAL and LL driver alpha version for most peripherals:
+<ul>
+<li><strong>HAL</strong>: ADC,COMP, CORDIC, Cortex, CRC, CRYPT, DAC, DCACHE, DCMI, DMA, DMA2D, EXTI, FDCAN, FLASH, FMAC, GPIO, GTZC, HASH, I2C, ICACHE, IWDG, LPGPIO, LPTIM, MMC, NAND, NOR, OPAMP, OSPI, OTFDEC, PKA, PWR, RAMCFG, RCC, RNG, RTC, SAES, SAI, SD, SMBUS, SPI, SRAM, TIM, UART, USART, WWDG.</li>
+<li><strong>LL</strong>: BUS, Cortex, DAC, DMA2D, CORDIC, EXTI, FMAC, GPIO, LPGPIO, IWDG, RCC, RNG, USART, LPUART, SYSTEM.</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-4">Known Limitations</h2>
+<ul>
+<li>The following peripherals HAL drivers are not part of this Alpha Release
+<ul>
+<li>MDF, TSC</li>
+</ul></li>
+<li><strong>Almost provided API may be subject to update in the coming releases</strong>
+<ul>
+<li>I2C driver is not providing API for Smart run domain features</li>
+<li>USART and UART LL drivers are not supporting all peripheral features</li>
+</ul></li>
+<li><strong>The drivers are not yet fully validated on silicon</strong></li>
+<li>MISRA-C 2012 compliance is not done</li>
+<li>Static code analysis is not done</li>
+</ul>
+<h2 id="backward-compatibility-4">Backward compatibility</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V0.1.0 / 06-December-2019</strong></label>
+<div>
+<h2 id="main-changes-5">Main Changes</h2>
+<ul>
+<li>First alpha release for STM32U5xxxx devices</li>
+<li>HAL and LL driver alpha version for most peripherals:
+<ul>
+<li><strong>HAL</strong>: COMP, CORDIC, Cortex, CRC, CRYPT, DAC, DCACHE, DCMI, DMA, DMA2D, EXTI, FDCAN, FLASH, FMAC, GPIO, GTZC, HASH, I2C, ICACHE, IWDG, LPGPIO, LPTIM, MMC, NAND, NOR, OPAMP, OSPI, OTFDEC, PKA, PWR, RAMCFG, RCC, RNG, RTC, SAES, SAI, SD, SMBUS, SPI, SRAM, TIM, UART, USART, WWDG.</li>
+<li><strong>LL</strong>: BUS, Cortex, EXTI, GPIO, LPGPIO, RCC, DAC, USART, LPUART, SYSTEM.</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-5">Known Limitations</h2>
+<ul>
+<li>The following peripherals HAL drivers are not part of this Alpha Release
+<ul>
+<li>ADC, MDF, TSC</li>
+</ul></li>
+<li><strong>Almost provided API may be subject to update in the coming releases</strong>
+<ul>
+<li>ADC HAL driver will be fully reworked</li>
+<li>I2C driver is not providing API for Smart run domain features</li>
+<li>USART and UART LL drivers are not supporting all peripheral features</li>
+</ul></li>
+<li><strong>The drivers are validated on FPGA and not on silicon</strong></li>
+<li>MISRA-C 2012 compliance is not done</li>
+<li>Static code analysis is not done</li>
+</ul>
+<h2 id="backward-compatibility-5">Backward compatibility</h2>
+<p>None</p>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+<p>For complete documentation on STM32 Microcontrollers </mark> , visit: <span style="font-color: blue;"><a href="http://www.st.com/stm32">www.st.com/stm32</a></span></p>
+This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.
+</footer>
+</body>
+</html>
