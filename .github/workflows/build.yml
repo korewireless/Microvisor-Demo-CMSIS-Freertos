@@ -13,3 +13,8 @@ jobs:
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
       run: docker run --rm -v $(pwd)/:/home/ --name microvisor-gpio-sample microvisor-gpio-sample-image
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: gpio_toggle_demo
+        path: ${{ github.workspace }}/build/gpio_toggle_demo.*
