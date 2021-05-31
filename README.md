@@ -22,12 +22,12 @@ Dependencies:
 
 - cmake
 - gcc-arm-none-eabi (tested with 9-2019-q4)
-- `mv_implib.h` and `mv_implib.o` somewhere on your system
+- `mv_api.h` and `mv_implib.o` somewhere on your system
 
 Getting ready to build:
 
 - Generate the Makefiles and project.  Instead of providing a path to
-`MV_IMPLIB_DIR`, you can also copy the `mv_implib.h` and `mv_implib.o`
+`MV_IMPLIB_DIR`, you can also copy the `mv_api.h` and `mv_implib.o`
 files into the uapi/ directory in this project and omit that parameter:
 
         cmake -D MV_IMPLIB_DIR="~/ei/uapi/" -S . -B build/
