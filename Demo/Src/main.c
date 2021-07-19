@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
+#include <stdio.h>
 
 #include "main.h"
 #include "cmsis_os.h"
