@@ -1,6 +1,9 @@
 [submodule "FreeRTOS-Kernel"]
 	path = FreeRTOS-Kernel
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
-[submodule "STM32CubeU5"]
-	path = STM32CubeU5
-	url = git@github.com:twilio/twSTM32CubeU5.git
+[submodule "twilio-microvisor-hal"]
+	path = twilio-microvisor-hal
+	url = git@github.com:twilio/twilio-microvisor-hal.git
+[submodule "twilio-microvisor-sdk"]
+	path = twilio-microvisor-sdk
+	url = git@github.com:twilio/twilio-microvisor-sdk.git
