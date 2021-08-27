@@ -5,7 +5,7 @@ set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/toolchain.cmake")
 project(gpio_toggle_demo.elf C ASM)
 
 include_directories(include
-                    ${twilio-microvisor-hal_INCLUDE_DIRS})
+                    ${twilio-microvisor-hal-stm32u5_INCLUDE_DIRS})
 
 set(INCLUDED_HAL_FILES
   Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal.c
@@ -32,7 +32,7 @@ set(INCLUDED_HAL_FILES
 set(CONFIG_DIRECTORY
   "${CMAKE_SOURCE_DIR}/Config"
 )
-add_subdirectory(twilio-microvisor-hal)
+add_subdirectory(twilio-microvisor-hal-stm32u5)
 
 add_library(ST_Code STATIC
   ST_Code/Core/Src/syscalls.c ST_Code/Core/Src/sysmem.c
@@ -45,7 +45,7 @@ target_include_directories(ST_Code PUBLIC
   ST_Code/Core/Inc
 )
 
-target_link_libraries(ST_Code LINK_PUBLIC twilio-microvisor-hal FreeRTOS)
+target_link_libraries(ST_Code LINK_PUBLIC twilio-microvisor-hal-stm32u5 FreeRTOS)
 
 add_library(FreeRTOS STATIC
   FreeRTOS-Kernel/croutine.c

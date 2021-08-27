@@ -9,7 +9,7 @@ target_include_directories(gpio_toggle_demo.elf PUBLIC
   Inc/
 )
 
-target_link_libraries(gpio_toggle_demo.elf LINK_PUBLIC ST_Code twilio-microvisor-hal FreeRTOS)
+target_link_libraries(gpio_toggle_demo.elf LINK_PUBLIC ST_Code twilio-microvisor-hal-stm32u5 FreeRTOS)
 
 # Optional informational and additional format generation
 add_custom_command(OUTPUT EXTRAS
