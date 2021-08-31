@@ -4,7 +4,7 @@ This is a simple demonstration of user firmware based on FreeRTOS which will run
 
 The modified files mostly live in the [Demo/](Demo/) directory, including the `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configurations.
 
-The sample toggles a non-secure GPIO on port F, pin 0 once a second.  It also emits a "ping" to the Microvisor logger once a second.
+The sample toggles GPIO A5, which is the user led on the Microvisor Nucleo board.  It also emits a "ping" to the Microvisor logger once a second.
 
 ## Building with Docker
 
