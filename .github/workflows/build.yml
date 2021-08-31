@@ -22,28 +22,40 @@ jobs:
     - name: Create ssh key
       run: |
         mkdir -p ~/.ssh
-        cat << EOF > ~/.ssh/submodulekey
-        ${{ secrets.HAL_SUBMODULE_PULL_KEY }}
+        cat << EOF > ~/.ssh/hal-submodule.key
+        ${{ secrets.FREERTOS_HAL_SUBMODULE_PULL_KEY }}
         EOF
-        chmod 700 ~/.ssh/submodulekey
+        cat << EOF > ~/.ssh/sdk-submodule.key
+        ${{ secrets.FREERTOS_SDK_SUBMODULE_PULL_KEY }}
+        EOF
+        chmod 700 ~/.ssh/*.key
     - name: create ssh-config
       run: |
         cat << EOF > ~/.ssh/config
-        Host github.com-twilio
+        Host github.com-twilio-hal
         HostName github.com
         User git
-        IdentityFile ~/.ssh/submodulekey
+        IdentityFile ~/.ssh/hal-submodule.key
+
+        Host github.com-twilio-sdk
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/sdk-submodule.key
         EOF
     - name: force gitmodules to use key
       run: |
-        sed -i 's/@github.com:twilio/@github.com-twilio:twilio/g' .gitmodules
+        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-sdk)#\1-twilio-sdk\2#g' .gitmodules
+        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-hal-stm32u5)#\1-twilio-hal\2#g' .gitmodules
     - name: fetch submodules manually
       run: |
         git submodule sync
-        git submodule update --init --recursive
+        git submodule update --init
+        cd twilio-microvisor-hal-stm32u5
+        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-sdk)#\1-twilio-sdk\2#g' .gitmodules
+        git submodule update --init
     - name: cleanup key
       run: |
-        rm ~/.ssh/submodulekey
+        rm ~/.ssh/*.key
 
 
     - name: Build docker image
@@ -54,4 +66,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: gpio_toggle_demo
-        path: ${{ github.workspace }}/build/gpio_toggle_demo.*
+        path: ${{ github.workspace }}/build/Demo/gpio_toggle_demo.*
