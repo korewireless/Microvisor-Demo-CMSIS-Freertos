@@ -22,18 +22,19 @@ Dependencies:
 
 - cmake
 - gcc-arm-none-eabi (tested with 9-2019-q4)
-- `mv_api.h` and `mv_implib.o` somewhere on your system
 
 Getting ready to build:
 
-- Generate the Makefiles and project.  Instead of providing a path to
-`MV_IMPLIB_DIR`, you can also copy the `mv_api.h` and `mv_implib.o`
-files into the uapi/ directory in this project and omit that parameter:
+- Ensure all submodules are initialized:
 
-        cmake -D MV_IMPLIB_DIR="~/ei/uapi/" -S . -B build/
+        git submodule update --init --recursive
+
+- Generate the Makefiles and project:
+
+        cmake -S . -B build/
 
 - Build the executable:
 
         cmake --build build --clean-first
 
-The deliverable you can provision onto Microvisor will be built into `build/gpio_toggle_demo.elf`.
+The deliverable you can provision onto Microvisor will be built into `build/Demo/gpio_toggle_demo.elf`.
