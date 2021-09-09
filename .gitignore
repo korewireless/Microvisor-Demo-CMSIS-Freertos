@@ -3,3 +3,4 @@
 *.d
 *.su
 *.sw[pno]
+build/*
