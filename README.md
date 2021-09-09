@@ -1,8 +1,10 @@
 # FreeRTOS Microvisor Sample Project
 
-This repo provides a basic demonstration of user application firmware based on the [FreeRTOS](https://freertos.org/) real-time OS and which will run on the “non-secure” side of Microvisor.
+This repo provides a basic demonstration of user application firmware based on the [FreeRTOS](https://freertos.org/) real-time operating system and which will run on the “non-secure” side of Microvisor.
 
-Most of the project files can be found in the [Demo/](Demo/) directory, including the `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configuration files.
+Most of the project files can be found in the [Demo/](Demo/) directory. The [ST_Code/](ST_Code/) directory contains required components that are not part of Twilio Microvisor STM32U5 HAL, which this sample accesses as a submodule. FreeRTOS is also incorporated as a submodule.
+
+The `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configuration files are located in the [Config/](Config/) directory.
 
 The sample code toggles GPIO A5, which is the user LED on the Microvisor Nucleo board. It also emits a “ping” to the Microvisor logger once a second.
 
