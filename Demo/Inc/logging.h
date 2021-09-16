@@ -1,5 +1,5 @@
-#ifndef __LOGGING_H
-#define __LOGGING_H
+#ifndef LOGGING_H
+#define LOGGING_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,4 +12,4 @@ void CloseLogChannel(void);
 }
 #endif
 
-#endif /* __LOGGING_H */
+#endif /* LOGGING_H */
