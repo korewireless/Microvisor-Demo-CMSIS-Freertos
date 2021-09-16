@@ -92,7 +92,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  mvTemporaryServerLog((uint8_t *)"hello world", 11);
+  ServerLog("hello world");
+  CloseLogChannel();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -230,8 +231,8 @@ void StartDebugTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    sprintf(buffer, "ping %u", n);
-    mvTemporaryServerLog((uint8_t *)buffer, strlen(buffer));
+    snprintf(buffer, sizeof(buffer), "ping %u", n);
+    ServerLog(buffer); // ServerLog() implicitly opens a connection if needed, we'll skip closing it given the repeating nature of this sample
     n++;
     osDelay(1000);
   }

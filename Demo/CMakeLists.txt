@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 add_executable(gpio_toggle_demo.elf
   Src/main.c
+  Src/logging.c
   Src/stm32u5xx_hal_timebase_tim_template.c
 )
 
