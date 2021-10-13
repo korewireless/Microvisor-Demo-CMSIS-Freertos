@@ -45,6 +45,8 @@ Prepare to build:
 
 The deliverable you can provision onto the Microvisor Nucleo board will be built into `build/Demo/gpio_toggle_demo.elf`.
 
+To provision the build, a bundle must be created using the [bundler tool](https://github.com/twilio/twilio-microvisor-tools/tree/main/bundler-py).  Please refer to the documentation for that tool on creating the Microvisor bundle.
+
 ## Copyright
 
 The sample code is © 2021, Twilio, Inc.
