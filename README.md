@@ -33,19 +33,23 @@ Prepare to build:
 
 - Ensure all submodules are initialized:
 
-        git submodule update --init --recursive
-
+    ```shell
+    git submodule update --init --recursive
+    ```
 - Generate the Makefiles and project:
 
-        cmake -S . -B build/
-
+    ```shell
+    cmake -S . -B build/
+    ```
 - Build the executable:
 
-        cmake --build build --clean-first
+    ```shell
+    cmake --build build --clean-first
+    ```
 
-The deliverable you can provision onto the Microvisor Nucleo board will be built into `build/Demo/gpio_toggle_demo.elf`.
+The deliverable you can provision onto the Microvisor Nucleo Development Board will be built to `build/Demo/gpio_toggle_demo.elf`.
 
-To provision the build, a bundle must be created using the [bundler tool](https://github.com/twilio/twilio-microvisor-tools/tree/main/bundler-py).  Please refer to the documentation for that tool on creating the Microvisor bundle.
+To deploy the build, create a Microvisor application bundle using the [Bundler tool](https://github.com/twilio/twilio-microvisor-tools/tree/main/bundler-py). Please refer to Bundler’s documentation for further guidance.
 
 ## Copyright
 
