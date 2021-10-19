@@ -52,7 +52,6 @@ jobs:
         EOF
     - name: force gitmodules to use key
       run: |
-        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-sdk)#\1-twilio-sdk\2#g' .gitmodules
         sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-tools)#\1-twilio-tools\2#g' .gitmodules
         sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-hal-stm32u5)#\1-twilio-hal\2#g' .gitmodules
     - name: fetch submodules manually
@@ -61,7 +60,6 @@ jobs:
         git submodule update --init
         cd twilio-microvisor-hal-stm32u5
         sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-sdk)#\1-twilio-sdk\2#g' .gitmodules
-        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-tools)#\1-twilio-tools\2#g' .gitmodules
         git submodule update --init
     - name: cleanup key
       run: |
