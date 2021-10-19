@@ -22,6 +22,8 @@ Run the build:
 docker run -it --rm -v $(pwd)/:/home/ --name microvisor-gpio-sample microvisor-gpio-sample-image
 ```
 
+The bundle for submission to Twilio for deployment will be `build/Demo/gpio_toggle_demo.zip`.
+
 ## Build in Ubuntu
 
 The sample code has the following dependencies:
@@ -43,9 +45,9 @@ Prepare to build:
 
         cmake --build build --clean-first
 
-The deliverable you can provision onto the Microvisor Nucleo board will be built into `build/Demo/gpio_toggle_demo.elf`.
+The binary you can build into a Microvisor bundle will be built into `build/Demo/gpio_toggle_demo.elf`.
 
-To provision the build, a bundle must be created using the [bundler tool](https://github.com/twilio/twilio-microvisor-tools/tree/main/bundler-py).  Please refer to the documentation for that tool on creating the Microvisor bundle.
+To provision the build, a bundle must be created with the elf binary using the [bundler tool](https://github.com/twilio/twilio-microvisor-tools/tree/main/bundler-py).  Please refer to the documentation for that tool on creating the Microvisor bundle.
 
 ## Copyright
 
