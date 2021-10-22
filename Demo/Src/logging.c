@@ -1,4 +1,7 @@
 #include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include "logging.h"
 #include "stm32u5xx_hal.h"
@@ -109,4 +112,26 @@ void ServerLog(const char *str)
     assert(status == MV_STATUS_OKAY);
     status = mvWriteChannel(log_handles.channel, (const uint8_t*)"\n", 1, &available);
     assert(status == MV_STATUS_OKAY);
+}
+
+// wire up stdio syscall, so printf works
+int _write(int file, char *ptr, int len)
+{
+    if (file != STDOUT_FILENO) {
+        errno = EBADF;
+        return -1;
+    }
+
+    if (log_handles.channel == 0) {
+        OpenLogChannel();
+    }
+
+    uint32_t written, status;
+    status = mvWriteChannelStream(log_handles.channel, (const uint8_t*)ptr, len, &written);
+    if (status == MV_STATUS_OKAY) {
+        return written;
+    } else {
+        errno = EIO;
+        return -1;
+    }
 }

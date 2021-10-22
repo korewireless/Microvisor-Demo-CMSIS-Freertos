@@ -92,7 +92,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  ServerLog("hello world");
+  printf("hello world\n");
   CloseLogChannel();
   /* USER CODE END Init */
 
@@ -226,13 +226,11 @@ void StartDebugTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
   unsigned n = 0;
-  char buffer[16];
 
   /* Infinite loop */
   for(;;)
   {
-    snprintf(buffer, sizeof(buffer), "ping %u", n);
-    ServerLog(buffer); // ServerLog() implicitly opens a connection if needed, we'll skip closing it given the repeating nature of this sample
+    printf("ping %u\n", n);
     n++;
     osDelay(1000);
   }
