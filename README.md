@@ -6,7 +6,7 @@ Most of the project files can be found in the [Demo/](Demo/) directory. The [ST_
 
 The `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configuration files are located in the [Config/](Config/) directory.
 
-The sample code toggles GPIO A5, which is the user LED on the Microvisor Nucleo board. It also emits a “ping” to the Microvisor logger once a second.
+The sample code toggles GPIO A5, which is the user LED on the Microvisor Nucleo Development Board. It also emits a “ping” to the Microvisor logger once a second.
 
 ## Build with Docker
 
@@ -35,19 +35,23 @@ Prepare to build:
 
 - Ensure all submodules are initialized:
 
-        git submodule update --init --recursive
-
+    ```shell
+    git submodule update --init --recursive
+    ```
 - Generate the Makefiles and project:
 
-        cmake -S . -B build/
-
+    ```shell
+    cmake -S . -B build/
+    ```
 - Build the executable:
 
-        cmake --build build --clean-first
+    ```shell
+    cmake --build build --clean-first
+    ```
 
-The binary you can build into a Microvisor bundle will be built into `build/Demo/gpio_toggle_demo.elf`.
+The deliverable you can provision onto the Microvisor Nucleo Development Board will be built to `build/Demo/gpio_toggle_demo.elf`.
 
-To provision the build, a bundle must be created with the elf binary using the [bundler tool](https://github.com/twilio/twilio-microvisor-tools/tree/main/bundler-py).  Please refer to the documentation for that tool on creating the Microvisor bundle.
+To deploy the build, create a Microvisor application bundle using the [Bundler tool](https://github.com/twilio/twilio-microvisor-tools/). The Bundler repo is included as a submodule of this project.
 
 ## Copyright
 
