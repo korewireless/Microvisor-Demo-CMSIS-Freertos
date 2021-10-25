@@ -211,9 +211,8 @@ int _write(int file, char *ptr, int length) {
     // will be invalid, ie. zero. If that's the case, open a channel
     if (log_handles.channel == 0) OpenLogChannel();
 
-    // Write out the message string and then send a convenient
-    // carriage return too. Each time confirm that Microvisor has
-    // accepted the request to write data to the channel.
+    // Write out the message string. Each time confirm that Microvisor
+    // has accepted the request to write data to the channel.
     uint32_t written, status;
     status = mvWriteChannelStream(log_handles.channel, (const uint8_t*)ptr, length, &written);
     if (status == MV_STATUS_OKAY) {
