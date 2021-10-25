@@ -28,7 +28,7 @@ struct {
 static volatile struct MvNotification log_notification_buffer[16];
 
 // Arbitrary user-specified uint32_t tags for any notifications
-// from Microviosr calls that support notifications:
+// from Microvisor calls that support notifications:
 const uint32_t USER_TAG_LOGGING_REQUEST_NETWORK = 1;
 const uint32_t USER_TAG_LOGGING_OPEN_CHANNEL    = 2;
 
@@ -181,9 +181,9 @@ void ServerLog(const char *message) {
     // will be invalid, ie. zero. If that's the case, open a channel
     if (log_handles.channel == 0) OpenLogChannel();
 
-    // Write out the message string and then send a connvenient
+    // Write out the message string and then send a convenient
     // carriage return too. Each time confirm that Microvisor has
-    // accepted the request to wriute data to the channel.
+    // accepted the request to write data to the channel.
     uint32_t available, status;
     status = mvWriteChannel(log_handles.channel, (const uint8_t*)message, strlen(message), &available);
     assert(status == MV_STATUS_OKAY);
@@ -211,9 +211,9 @@ int _write(int file, char *ptr, int length) {
     // will be invalid, ie. zero. If that's the case, open a channel
     if (log_handles.channel == 0) OpenLogChannel();
 
-    // Write out the message string and then send a connvenient
+    // Write out the message string and then send a convenient
     // carriage return too. Each time confirm that Microvisor has
-    // accepted the request to wriute data to the channel.
+    // accepted the request to write data to the channel.
     uint32_t written, status;
     status = mvWriteChannelStream(log_handles.channel, (const uint8_t*)ptr, length, &written);
     if (status == MV_STATUS_OKAY) {
