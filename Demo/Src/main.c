@@ -49,16 +49,18 @@
 /* Definitions for defaultTask */
 osThreadId_t GPIOTask;
 const osThreadAttr_t GPIOTask_attributes = {
-  .name = "GPIOTask",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 1024
+    .name = "GPIOTask",
+    .priority = (osPriority_t) osPriorityNormal,
+    .stack_size = 1024
 };
+
 osThreadId_t DebugTask;
 const osThreadAttr_t DebugTask_attributes = {
-  .name = "DebugTask",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 1024
+    .name = "DebugTask",
+    .priority = (osPriority_t) osPriorityNormal,
+    .stack_size = 1024
 };
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -83,79 +85,80 @@ void StartDebugTask(void *argument);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-  /* USER CODE END 1 */
+    /* USER CODE BEGIN 1 */
+    /* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+    /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+    HAL_Init();
 
-  /* USER CODE BEGIN Init */
-  printf("hello world\n");
-  CloseLogChannel();
-  /* USER CODE END Init */
+    /* USER CODE BEGIN Init */
+    printf("Hello, World!\n");
+    CloseLogChannel();
+    /* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+    /* Configure the system clock */
+    SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+    /* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+    /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  /* USER CODE BEGIN 2 */
+    /* Initialize all configured peripherals */
+    MX_GPIO_Init();
+    /* USER CODE BEGIN 2 */
 
-  /* USER CODE END 2 */
+    /* USER CODE END 2 */
 
-  /* Init scheduler */
-  osKernelInitialize();
+    /* Init scheduler */
+    osKernelInitialize();
 
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
+    /* USER CODE BEGIN RTOS_MUTEX */
+    /* add mutexes, ... */
+    /* USER CODE END RTOS_MUTEX */
 
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
+    /* USER CODE BEGIN RTOS_SEMAPHORES */
+    /* add semaphores, ... */
+    /* USER CODE END RTOS_SEMAPHORES */
 
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
+    /* USER CODE BEGIN RTOS_TIMERS */
+    /* start timers, add new ones, ... */
+    /* USER CODE END RTOS_TIMERS */
 
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
+    /* USER CODE BEGIN RTOS_QUEUES */
+    /* add queues, ... */
+    /* USER CODE END RTOS_QUEUES */
 
-  /* Create the thread(s) */
-  /* creation of defaultTask */
-  GPIOTask = osThreadNew(StartGPIOTask, NULL, &GPIOTask_attributes);
-  DebugTask = osThreadNew(StartDebugTask, NULL, &DebugTask_attributes);
+    /* Create the thread(s) */
+    /* creation of defaultTask */
+    GPIOTask = osThreadNew(StartGPIOTask, NULL, &GPIOTask_attributes);
+    DebugTask = osThreadNew(StartDebugTask, NULL, &DebugTask_attributes);
 
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
+    /* USER CODE BEGIN RTOS_THREADS */
+    /* add threads, ... */
+    /* USER CODE END RTOS_THREADS */
 
-  /* Start scheduler */
-  osKernelStart();
- 
-  /* We should never get here as control is now taken by the scheduler */
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+    /* Start scheduler */
+    osKernelStart();
 
-  while (1)
-  {
-    /* USER CODE END WHILE */
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+    /* We should never get here as control is now taken by the scheduler */
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
+
+    while (1)
+    {
+        /* USER CODE END WHILE */
+        /* USER CODE BEGIN 3 */
+    }
+    /* USER CODE END 3 */
 }
 
-uint32_t SECURE_SystemCoreClockUpdate() {
-  uint32_t clock = 0;
-  mvGetHClk(&clock);
-  return clock;
+uint32_t SECURE_SystemCoreClockUpdate()
+{
+    uint32_t clock = 0;
+    mvGetHClk(&clock);
+    return clock;
 }
 
 /**
@@ -164,8 +167,8 @@ uint32_t SECURE_SystemCoreClockUpdate() {
   */
 void SystemClock_Config(void)
 {
-  SystemCoreClockUpdate();
-  HAL_InitTick(TICK_INT_PRIORITY);
+    SystemCoreClockUpdate();
+    HAL_InitTick(TICK_INT_PRIORITY);
 }
 
 /**
@@ -175,21 +178,21 @@ void SystemClock_Config(void)
   */
 static void MX_GPIO_Init(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  /* GPIO Ports Clock Enable */
+    /* GPIO Ports Clock Enable */
 
-  __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PA5 - Pin under test */
-  GPIO_InitStruct.Pin = GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    /*Configure GPIO pin : PA5 - Pin under test */
+    GPIO_InitStruct.Pin = GPIO_PIN_5;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
@@ -199,42 +202,42 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN Header_StartGPIOTask */
 /**
   * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used 
+  * @param  argument: Not used
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
 void StartGPIOTask(void *argument)
 {
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-    osDelay(1000);
-  }
-  /* USER CODE END 5 */ 
+    /* USER CODE BEGIN 5 */
+    /* Infinite loop */
+    for(;;)
+    {
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+        osDelay(1000);
+    }
+    /* USER CODE END 5 */
 }
 
 /* USER CODE BEGIN Header_StartDebugTask */
 /**
   * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used 
+  * @param  argument: Not used
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
 void StartDebugTask(void *argument)
 {
-  /* USER CODE BEGIN 5 */
-  unsigned n = 0;
+    /* USER CODE BEGIN 5 */
+    unsigned n = 0;
 
-  /* Infinite loop */
-  for(;;)
-  {
-    printf("ping %u\n", n);
-    n++;
-    osDelay(1000);
-  }
-  /* USER CODE END 5 */ 
+    /* Infinite loop */
+    for(;;)
+    {
+        printf("Ping %u\n", n);
+        n++;
+        osDelay(1000);
+    }
+    /* USER CODE END 5 */
 }
 
 /**
@@ -243,13 +246,13 @@ void StartDebugTask(void *argument)
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
+    /* USER CODE BEGIN Error_Handler_Debug */
+    /* User can add his own implementation to report the HAL error return state */
 
-  /* USER CODE END Error_Handler_Debug */
+    /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
@@ -258,12 +261,12 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
-#endif /* USE_FULL_ASSERT */
+#endif  /* USE_FULL_ASSERT */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
