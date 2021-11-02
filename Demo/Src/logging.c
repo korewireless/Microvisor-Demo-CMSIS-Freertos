@@ -113,7 +113,9 @@ void OpenLogChannel(void) {
         }
 
         // ... or wait a short period before retrying
-        for (volatile unsigned i = 0; i < 50000; i++) {}
+        for (volatile unsigned i = 0; i < 50000; i++) {
+            // NOP
+        }
     }
 
     // Ask Microvisor to open the channel
@@ -179,7 +181,9 @@ void CloseLogChannel(void) {
 void ServerLog(const char *message) {
     // Do we have an open channel? If not, any stored channel handle
     // will be invalid, ie. zero. If that's the case, open a channel
-    if (log_handles.channel == 0) OpenLogChannel();
+    if (log_handles.channel == 0) {
+        OpenLogChannel();
+    }
 
     // Write out the message string and then send a convenient
     // carriage return too. Each time confirm that Microvisor has
@@ -209,7 +213,9 @@ int _write(int file, char *ptr, int length) {
 
     // Do we have an open channel? If not, any stored channel handle
     // will be invalid, ie. zero. If that's the case, open a channel
-    if (log_handles.channel == 0) OpenLogChannel();
+    if (log_handles.channel == 0) {
+        OpenLogChannel();
+    }
 
     // Write out the message string. Each time confirm that Microvisor
     // has accepted the request to write data to the channel.
