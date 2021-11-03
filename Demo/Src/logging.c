@@ -114,7 +114,8 @@ void OpenLogChannel(void) {
 
         // ... or wait a short period before retrying
         for (volatile unsigned i = 0; i < 50000; i++) {
-            // NOP
+            // No op
+            __asm("nop");
         }
     }
 
