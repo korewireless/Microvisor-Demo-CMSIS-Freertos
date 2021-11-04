@@ -93,7 +93,46 @@ int main(void)
 
   /* USER CODE BEGIN Init */
   printf("hello world\n");
-  CloseLogChannel();
+  //CloseLogChannel();
+
+  const char* header_contenttype = "Content-Type: application/x-www-form-urlencoded";
+  const char* header_authorization = "Authorization: Basic " AUTH_TOKEN;
+
+  struct MvHttpHeader headers[2] = {
+      {
+          .length = strlen(header_contenttype),
+          .data = (uint8_t*) header_contenttype
+      },
+      {
+          .length = strlen(header_authorization),
+          .data = (uint8_t*) header_authorization
+      },
+  };
+
+  const char *url = "https://supersim.twilio.com/v1/SmsCommands";
+  uint8_t body[] = "Sim=" SIM_SID "&Payload=Hello from Microvisor!\n0123456789ABDCEF0123456789ABCDEF01";
+  uint32_t bodylen = sizeof(body) - 1;
+
+  mvGetDeviceId(&body[bodylen-34], 34);
+
+  struct MvHttpRequest request = {
+      .method = (uint8_t*) "POST",
+      .method_len = 4,
+      .url = (uint8_t*) url,
+      .url_len = strlen(url),
+      .num_headers = 2,
+      .headers = headers,
+      .body = (uint8_t*) body,
+      .body_len = bodylen,
+      .timeout_ms = 10000,
+  };
+
+  enum MvStatus status = SendHttpRequest(&request);
+  if (status == MV_STATUS_OKAY) {
+      printf("Successfully sent HTTP request\n");
+  } else {
+      printf("Sending HTTP request failed with code %d\n", status);
+  }
   /* USER CODE END Init */
 
   /* Configure the system clock */
