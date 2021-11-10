@@ -1,72 +1,56 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
+#ifndef _MAIN_H_
+#define _MAIN_H_
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef MAIN_H
-#define MAIN_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
+
+/*
+ * INCLUDES
+ */
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <errno.h>
+
 #include "stm32u5xx_hal.h"
+#include "cmsis_os.h"
+#include "mv_syscalls.h"
+
 #include "logging.h"
+#include "ht16k33.h"
+#include "i2c.h"
+#include "mcp9808.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+/*
+ * CONSTANTS
+ */
+#define     LED_GPIO_BANK           GPIOA
+#define     LED_GPIO_PIN            GPIO_PIN_5
+#define     LED_FLASH_PERIOD        1000
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+#define     DEBUG_TASK_PAUSE        1000
+#define     DEFAULT_TASK_PAUSE      500
 
-/* USER CODE END ET */
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+/*
+ * PROTOTYPES
+ */
+void        Error_Handler(void);
+void        SystemClock_Config(void);
+void        StartGPIOTask(void *argument);
+void        StartDebugTask(void *argument);
 
-/* USER CODE END EC */
+void        GPIO_init(void);
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* MAIN_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif      // _MAIN_H_
