@@ -109,11 +109,8 @@ int main(void)
       },
   };
 
-  const char *url = "https://supersim.twilio.com/v1/SmsCommands";
-  uint8_t body[] = "Sim=" SIM_SID "&Payload=Hello from Microvisor!\n0123456789ABDCEF0123456789ABCDEF01";
-  uint32_t bodylen = sizeof(body) - 1;
-
-  mvGetDeviceId(&body[bodylen-34], 34);
+  const char *url = "https://api.twilio.com/2010-04-01/Accounts/AC0c28ec878c53afda18e4f347ec009bc8/Messages.json";
+  const char *body = "Body=Hello%20Toby%20from%20Microvisor&From=%2B16175001429&To=%2B447889540825";
 
   struct MvHttpRequest request = {
       .method = (uint8_t*) "POST",
@@ -123,7 +120,7 @@ int main(void)
       .num_headers = 2,
       .headers = headers,
       .body = (uint8_t*) body,
-      .body_len = bodylen,
+      .body_len = strlen(body),
       .timeout_ms = 10000,
   };
 
@@ -133,6 +130,38 @@ int main(void)
   } else {
       printf("Sending HTTP request failed with code %d\n", status);
   }
+
+  WaitForHttpResponse();
+
+  printf("Received HTTP response\n");
+
+  struct MvHttpResponseData response;
+  status = GetHttpResponseData(&response);
+  if (status == MV_STATUS_OKAY) {
+    printf("result = %lu\n", (long)response.result);
+    printf("status_code = %lu\n", response.status_code);
+    printf("num headers = %lu\n", response.num_headers);
+    printf("body_length = %lu\n", response.body_length);
+
+    if (response.result == MV_HTTPRESULT_OK) {
+        uint8_t buffer[response.body_length+1];
+        memset(buffer, 0, sizeof(buffer));
+
+        for (unsigned i=0; i<response.num_headers; i++) {
+          status = GetHttpResponseHeader(i, buffer, sizeof(buffer));
+          if (status == MV_STATUS_OKAY) {
+            printf("header[%lu] = %s\n", (long)i, buffer);
+          }
+        }
+
+        status = GetHttpResponseBody(0, buffer, response.body_length);
+        if (status == MV_STATUS_OKAY) {
+          printf("body = %s\n", buffer);
+        }
+    }
+  }
+  FinishedWithHttpResponse();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
