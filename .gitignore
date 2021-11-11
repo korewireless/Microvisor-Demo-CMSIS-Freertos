@@ -4,4 +4,3 @@
 *.su
 *.sw[pno]
 build/*
-twilio-microvisor-tools/*
