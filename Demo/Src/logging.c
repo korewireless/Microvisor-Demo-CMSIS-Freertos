@@ -1,5 +1,11 @@
-#include "main.h"
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
 
+#include "logging.h"
+#include "stm32u5xx_hal.h"
+#include "mv_syscalls.h"
 
 struct {
     MvNotificationHandle notification;
