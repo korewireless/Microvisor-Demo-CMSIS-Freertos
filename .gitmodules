@@ -3,7 +3,7 @@
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
 [submodule "twilio-microvisor-hal-stm32u5"]
 	path = twilio-microvisor-hal-stm32u5
-	url = https://github.com/twilio/twilio-microvisor-hal-stm32u5
+	url = git@github.com:twilio/twilio-microvisor-hal-stm32u5.git
 [submodule "twilio-microvisor-tools"]
 	path = twilio-microvisor-tools
-	url = https://github.com/twilio/twilio-microvisor-tools
+	url = git@github.com:twilio/twilio-microvisor-tools.git
