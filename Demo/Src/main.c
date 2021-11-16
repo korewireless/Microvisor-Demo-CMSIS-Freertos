@@ -94,8 +94,6 @@ int main(void)
     HAL_Init();
 
     /* USER CODE BEGIN Init */
-    printf("Hello, World!\n");
-    CloseLogChannel();
     /* USER CODE END Init */
 
     /* Configure the system clock */
@@ -228,6 +226,7 @@ void StartGPIOTask(void *argument)
 void StartDebugTask(void *argument)
 {
     /* USER CODE BEGIN 5 */
+    printf("Hello, World!\n");
     unsigned n = 0;
 
     /* Infinite loop */
