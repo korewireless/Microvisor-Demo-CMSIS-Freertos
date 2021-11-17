@@ -5,67 +5,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-
-
-    # when submodule is public, this can be used:
-    #- name: Check out code
-      #uses: actions/checkout@v2
-      #with:
-        #submodules: true
-
-
-    # while submodule is private, we need to force checkout@v2 to use our key :|
     - name: Check out code
       uses: actions/checkout@v2
       with:
-        submodules: false
-    - name: Create ssh key
-      run: |
-        mkdir -p ~/.ssh
-        cat << EOF > ~/.ssh/hal-submodule.key
-        ${{ secrets.FREERTOS_HAL_SUBMODULE_PULL_KEY }}
-        EOF
-        cat << EOF > ~/.ssh/sdk-submodule.key
-        ${{ secrets.FREERTOS_SDK_SUBMODULE_PULL_KEY }}
-        EOF
-        cat << EOF > ~/.ssh/tools-submodule.key
-        ${{ secrets.FREERTOS_TOOLS_SUBMODULE_PULL_KEY }}
-        EOF
-        chmod 700 ~/.ssh/*.key
-    - name: create ssh-config
-      run: |
-        cat << EOF > ~/.ssh/config
-        Host github.com-twilio-hal
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/hal-submodule.key
-
-        Host github.com-twilio-sdk
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/sdk-submodule.key
-
-        Host github.com-twilio-tools
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/tools-submodule.key
-        EOF
-    - name: force gitmodules to use key
-      run: |
-        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-tools)#\1-twilio-tools\2#g' .gitmodules
-        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-hal-stm32u5)#\1-twilio-hal\2#g' .gitmodules
-    - name: fetch submodules manually
-      run: |
-        git submodule sync
-        git submodule update --init
-        cd twilio-microvisor-hal-stm32u5
-        sed -i -E 's#(@github.com)(:twilio/twilio-microvisor-sdk)#\1-twilio-sdk\2#g' .gitmodules
-        git submodule update --init
-    - name: cleanup key
-      run: |
-        rm ~/.ssh/*.key
-
-
+        submodules: 'recursive'
     - name: Build docker image
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
