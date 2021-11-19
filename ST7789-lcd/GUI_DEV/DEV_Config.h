@@ -32,7 +32,7 @@
 #ifndef _DEV_CONFIG_H_
 #define _DEV_CONFIG_H_
 
-#include "stm32f1xx_hal.h"
+#include "stm32u5xx_hal.h"
 #include <stdint.h>
 #include <stdio.h>
 #include "spi.h"
@@ -47,10 +47,10 @@
 /**
  * GPIO config
 **/
-#define DEV_RST_PIN     RST_GPIO_Port,RST_Pin		//PA9
-#define DEV_DC_PIN      DC_GPIO_Port,DC_Pin			//PA8
-#define DEV_CS_PIN			CS_GPIO_Port,CS_Pin			//PB6
-#define DEV_BL_PIN			TIM3->CCR2 							//PC7
+#define DEV_RST_PIN     RST_GPIO_Port,RST_Pin   //PD10
+#define DEV_DC_PIN      DC_GPIO_Port,DC_Pin     //PF13
+#define DEV_CS_PIN      CS_GPIO_Port,CS_Pin     //PE12
+#define DEV_BL_PIN      TIM4->CCR2              //PF12
 
 /**
  * GPIO read and write

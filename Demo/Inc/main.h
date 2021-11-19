@@ -60,7 +60,26 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
+#define DC_CLK_ENABLE_MACRO   __HAL_RCC_GPIOF_CLK_ENABLE
+#define DC_GPIO_Port          GPIOF
+#define DC_Pin                GPIO_PIN_13
 
+#define RST_CLK_ENABLE_MACRO  __HAL_RCC_GPIOD_CLK_ENABLE
+#define RST_GPIO_Port         GPIOD
+#define RST_Pin               GPIO_PIN_10
+
+#define CS_CLK_ENABLE_MACRO   __HAL_RCC_GPIOE_CLK_ENABLE
+#define CS_GPIO_Port          GPIOE
+#define CS_Pin                GPIO_PIN_12
+
+#define BL_CLK_ENABLE_MACRO   __HAL_RCC_GPIOD_CLK_ENABLE
+#define BL_GPIO_Port          GPIOD
+#define BL_Pin                GPIO_PIN_13
+
+#define SPI_CLK_ENABLE_MACRO __HAL_RCC_GPIOE_CLK_ENABLE
+#define SPI_GPIO_Port        GPIOE
+#define SPI_SCK_Pin          GPIO_PIN_13
+#define SPI_SDO_Pin          GPIO_PIN_15
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

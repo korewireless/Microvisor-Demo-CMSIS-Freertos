@@ -20,7 +20,7 @@
 #if DEV_DEBUG
 	#define Debug(__info,...) printf("Debug : " __info,##__VA_ARGS__)
 #else
-	#define DEBUG(__info,...)  
+	#define Debug(__info,...)
 #endif
 
 #endif

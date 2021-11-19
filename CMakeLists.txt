@@ -24,6 +24,8 @@ set(INCLUDED_HAL_FILES
   Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_pwr_ex.c
   Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rcc.c
   Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rcc_ex.c
+  Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_spi.c
+  Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_spi_ex.c
   Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_tim.c
   Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_tim_ex.c
   Drivers/CMSIS/Device/ST/STM32U5xx/Source/Templates/system_stm32u5xx_ns.c

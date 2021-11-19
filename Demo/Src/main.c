@@ -25,6 +25,14 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "mv_syscalls.h"
+#include "spi.h"
+#include "tim.h"
+#include "gpio.h"
+
+#include "LCD_Driver.h"
+#include "GUI_Paint.h"
+#include "fonts.h"
+#include "image.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -67,7 +75,7 @@ const osThreadAttr_t DebugTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
+static void MX_GPIO_Init_Local(void);
 void StartGPIOTask(void *argument);
 void StartDebugTask(void *argument);
 
@@ -105,7 +113,33 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
+    MX_GPIO_Init_Local();
+    MX_SPI1_Init();
+    MX_TIM4_Init();
     /* USER CODE BEGIN 2 */
+
+    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+    LCD_Init();
+    LCD_Clear(RED);
+    DEV_Delay_ms(1000);
+
+    LCD_Clear(GREEN);
+    DEV_Delay_ms(1000);
+
+    LCD_Clear(BLUE);
+    DEV_Delay_ms(1000);
+
+    Paint_NewImage(LCD_WIDTH, LCD_HEIGHT, 0, WHITE);
+    Paint_Clear(RED);
+    Paint_SetRotate(270);
+    Paint_DrawString_EN(30, 10, "Hello", &Font24, RED, WHITE);
+    Paint_DrawString_EN(30, 34, "Microvisor!", &Font24, RED, WHITE);
+    DEV_Delay_ms(1000);
+
+    DEV_Set_PWM(100); // set backlight pwm brightness lower
+    DEV_Delay_ms(1000);
+    DEV_Set_PWM(1000); // set backlight pwm brightness maximum
+    DEV_Delay_ms(1000);
 
     /* USER CODE END 2 */
 
@@ -174,7 +208,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_GPIO_Init(void)
+static void MX_GPIO_Init_Local(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 

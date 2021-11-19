@@ -8,6 +8,25 @@ The `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configuration files are locate
 
 The sample code toggles GPIO A5, which is the user LED on the Microvisor Nucleo Development Board. It also emits a “ping” to the Microvisor logger once a second.
 
+**Extensions for this branch:**
+
+This branch of the FreeRTOS Microvisor demo integrates a Waveshare 2in LCD Module.  The documentation and sample code we extended can be found [on Waveshare's website](https://www.waveshare.com/wiki/2inch_LCD_Module).
+
+The pins supported by this branch are as follows:
+
+| LCD PIN | mv PIN | mv Nucleo Pin |
+|  :---:  | :---:  | :---:         |
+| VCC     |        | +3v3          |
+| GND     |        | GND           |
+| DIN     | PE15   | CN12 53       |
+| CLK     | PE13   | CN12 55       |
+| CS      | PE12   | CN12 49       |
+| DC      | PF13   | CN12 57       |
+| RST     | PD10   | CN12 65       |
+| BL      | PD13   | CN12 41       |
+
+Other pins may be used, but `Demo/Inc/main.h` will need to be updated accordingly.
+
 ## Build with Docker
 
 Build the image:
