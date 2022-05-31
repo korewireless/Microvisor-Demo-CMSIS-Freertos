@@ -13,7 +13,7 @@ RUN apt-get -yqq update \
 RUN apt-get -yqq update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq \
     python3 python3-pip protobuf-compiler
-RUN pip3 install cryptography protobuf
+RUN pip3 install cryptography protobuf~=3.0
 WORKDIR /home
 
 USER $USERNAME
