@@ -233,6 +233,7 @@ void StartDebugTask(void *argument)
     for(;;)
     {
         printf("Ping %u\n", n);
+        printf("Logging alive\n", n);
         n++;
         osDelay(1000);
     }

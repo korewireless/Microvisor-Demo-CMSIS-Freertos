@@ -44,7 +44,7 @@ void TIM8_BRK_IRQHandler(void) {
     Open a data channel for Microvisor logging.
     This call will also request a network connection.
  */
-void OpenLogChannel(void) {
+void OpenNotifications(void) {
     // Clear the notification store
     memset((void *)log_notification_buffer, 0xFF, sizeof(log_notification_buffer));
 
@@ -62,7 +62,9 @@ void OpenLogChannel(void) {
 
     NVIC_ClearPendingIRQ(TIM8_BRK_IRQn);
     NVIC_EnableIRQ(TIM8_BRK_IRQn);
+}
 
+void OpenNetwork(void) {
     // Configure the network connection request
     struct MvRequestNetworkParams network_params = {
         .version = 1,
@@ -74,9 +76,12 @@ void OpenLogChannel(void) {
 
     // Ask Microvisor to establish the network connection
     // and confirm that it has accepted the request
-    status = mvRequestNetwork(&network_params, &log_handles.network);
+    uint32_t status = mvRequestNetwork(&network_params, &log_handles.network);
     assert(status == MV_STATUS_OKAY);
+}
 
+
+void OpenLogChannel(void) {
     // Set up the channel's send and receive buffers
     static volatile uint8_t receive_buffer[16];
     static volatile uint8_t send_buffer[512] __attribute__((aligned(512)));
@@ -121,7 +126,7 @@ void OpenLogChannel(void) {
 
     // Ask Microvisor to open the channel
     // and confirm that it has accepted the request
-    status = mvOpenChannel(&channel_params, &log_handles.channel);
+    uint32_t status = mvOpenChannel(&channel_params, &log_handles.channel);
     assert(status == MV_STATUS_OKAY);
 }
 
@@ -145,6 +150,10 @@ void CloseLogChannel(void) {
 
     // Confirm the channel handle has been invalidated by Microvisor
     assert(log_handles.channel == 0);
+}
+
+void CloseNetwork(void) {
+    uint32_t status;
 
     // If we have a valid network handle, then ask Microvisor to
     // close the connection and confirm acceptance of the request.
@@ -155,6 +164,10 @@ void CloseLogChannel(void) {
 
     // Confirm the network handle has been invalidated by Microvisor
     assert(log_handles.network == 0);
+}
+
+void CloseNotifications(void) {
+    uint32_t status;
 
     // If we have a valid notification center handle, then ask Microvisor
     // to tear down the center and confirm acceptance of the request.
@@ -180,6 +193,14 @@ void CloseLogChannel(void) {
     @param  message     The log entry -- a C string -- to send.
  */
 void ServerLog(const char *message) {
+    if (log_handles.notification == 0) {
+        OpenNotifications();
+    }
+
+    if (log_handles.network == 0) {
+        OpenNetwork();
+    }
+
     // Do we have an open channel? If not, any stored channel handle
     // will be invalid, ie. zero. If that's the case, open a channel
     if (log_handles.channel == 0) {
@@ -190,10 +211,14 @@ void ServerLog(const char *message) {
     // carriage return too. Each time confirm that Microvisor has
     // accepted the request to write data to the channel.
     uint32_t available, status;
-    status = mvWriteChannel(log_handles.channel, (const uint8_t*)message, strlen(message), &available);
-    assert(status == MV_STATUS_OKAY);
+    do {
+        status = mvWriteChannel(log_handles.channel, (const uint8_t*)message, strlen(message), &available);
+        if (status == MV_STATUS_CHANNELCLOSED) {
+            CloseLogChannel();
+            OpenLogChannel();
+        }
+    } while (status != MV_STATUS_OKAY);
     status = mvWriteChannel(log_handles.channel, (const uint8_t*)"\n", 1, &available);
-    assert(status == MV_STATUS_OKAY);
 }
 
 /**
@@ -212,6 +237,14 @@ int _write(int file, char *ptr, int length) {
         return -1;
     }
 
+    if (log_handles.notification == 0) {
+        OpenNotifications();
+    }
+
+    if (log_handles.network == 0) {
+        OpenNetwork();
+    }
+
     // Do we have an open channel? If not, any stored channel handle
     // will be invalid, ie. zero. If that's the case, open a channel
     if (log_handles.channel == 0) {
@@ -222,6 +255,11 @@ int _write(int file, char *ptr, int length) {
     // has accepted the request to write data to the channel.
     uint32_t written, status;
     status = mvWriteChannelStream(log_handles.channel, (const uint8_t*)ptr, length, &written);
+    if (status == MV_STATUS_CHANNELCLOSED) {
+        CloseLogChannel();
+        OpenLogChannel();
+        status = mvWriteChannelStream(log_handles.channel, (const uint8_t*)ptr, length, &written);
+    }
     if (status == MV_STATUS_OKAY) {
         // Return the number of characters written
         // out to the channel
