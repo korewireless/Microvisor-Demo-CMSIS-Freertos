@@ -61,6 +61,13 @@ const osThreadAttr_t DebugTask_attributes = {
     .stack_size = 1024
 };
 
+osThreadId_t NetworkTask;
+const osThreadAttr_t NetworkTask_attributes = {
+    .name = "NetworkTask",
+    .priority = (osPriority_t) osPriorityHigh,
+    .stack_size = 1024
+};
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -70,6 +77,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void StartGPIOTask(void *argument);
 void StartDebugTask(void *argument);
+void StartNetworkTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -130,6 +138,7 @@ int main(void)
 
     /* Create the thread(s) */
     /* creation of defaultTask */
+    NetworkTask = osThreadNew(StartNetworkTask, NULL, &NetworkTask_attributes);
     GPIOTask = osThreadNew(StartGPIOTask, NULL, &GPIOTask_attributes);
     DebugTask = osThreadNew(StartDebugTask, NULL, &DebugTask_attributes);
 
@@ -199,11 +208,11 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN Header_StartGPIOTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
+  * @brief  Function implementing the GPIOTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
+/* USER CODE END Header_StartGPIOTask */
 void StartGPIOTask(void *argument)
 {
     /* USER CODE BEGIN 5 */
@@ -218,11 +227,11 @@ void StartGPIOTask(void *argument)
 
 /* USER CODE BEGIN Header_StartDebugTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
+  * @brief  Function implementing the DebugTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
+/* USER CODE END Header_StartDebugTask */
 void StartDebugTask(void *argument)
 {
     /* USER CODE BEGIN 5 */
@@ -233,8 +242,34 @@ void StartDebugTask(void *argument)
     for(;;)
     {
         printf("Ping %u\n", n);
+        printf("Logging alive\n");
         n++;
         osDelay(1000);
+    }
+    /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartNetworkTask */
+/**
+  * @brief  Function implementing the NetworkTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartNetworkTask */
+void StartNetworkTask(void *argument)
+{
+    /* USER CODE BEGIN 5 */
+    OpenNetworkNotifications();
+    /* Infinite loop */
+    for(;;)
+    {
+        // Check whether notification ISR raised
+        if (NotificationIRQRaised()) {
+            // Call DSR if so
+            HandleIRQ();
+            ClearNotificationIRQ();
+        }
+        osDelay(10);
     }
     /* USER CODE END 5 */
 }
