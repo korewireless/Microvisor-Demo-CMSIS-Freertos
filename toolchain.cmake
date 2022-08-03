@@ -20,7 +20,8 @@ set(CMAKE_C_FLAGS "-mcpu=cortex-m33 -std=gnu11 -g3 \
   -DUSE_CUSTOM_SYSTICK_HANDLER_IMPLEMENTATION -DUSE_HAL_DRIVER -DSTM32L552xx \
   -DSTM32U585xx -DDEBUG -DCMSIS_device_header=\\\"stm32u585xx.h\\\" \
   -c -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage \
-  -MMD -MP --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=soft -mthumb")
+  -MMD -MP --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=soft -mthumb \
+  -Werror")
 
 set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m33 --specs=nosys.specs -Wl,--gc-sections -static \
   -Wl,--start-group -lc -lm -Wl,--end-group -mfloat-abi=soft" CACHE INTERNAL "")
