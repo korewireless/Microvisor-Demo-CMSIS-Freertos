@@ -21,6 +21,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include "main.h"
 #include "cmsis_os.h"
@@ -86,6 +88,8 @@ void StartDebugTask(void *argument);
 int main(void)
 {
     /* USER CODE BEGIN 1 */
+    static uint8_t buffer[4096] __attribute__ ((aligned(512)));
+    mvServerLoggingInit(buffer, sizeof(buffer));
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -233,7 +237,7 @@ void StartDebugTask(void *argument)
     for(;;)
     {
         printf("Ping %u\n", n);
-        printf("Logging alive\n", n);
+        printf("Logging alive\n");
         n++;
         osDelay(1000);
     }
@@ -268,5 +272,34 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif  /* USE_FULL_ASSERT */
+
+/**
+    Wire up the `write(STDOUT_FILENO)` system call, so that `printf()`
+    works as a logging message generator.
+
+    @param  file    The log entry -- a C string -- to send.
+    @param  ptr     A pointer to the C string we want to send.
+    @param  length  The length of the message.
+
+    @return         The number of bytes written, or -1 to indicate error.
+ */
+int _write(int file, char *ptr, int length) {
+    if (file != STDOUT_FILENO) {
+        errno = EBADF;
+        return -1;
+    }
+
+    // Write out the message string. Each time confirm that Microvisor
+    // has accepted the log request.
+    const enum MvStatus status = mvServerLog((const uint8_t*)ptr, length);
+    if (status == MV_STATUS_OKAY) {
+        // Return the number of characters written
+        // out to the channel
+        return length;
+    } else {
+        errno = EIO;
+        return -1;
+    }
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
