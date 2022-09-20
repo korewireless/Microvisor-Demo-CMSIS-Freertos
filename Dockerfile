@@ -9,12 +9,22 @@ RUN useradd -m -u $UID -g $GID -o -s /bin/bash $USERNAME
 RUN apt-get -yqq update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq \
     cmake gcc-arm-none-eabi
-# Dependencies for bundler-py:
+
+# Twilio CLI for bundle generation via debian package:
 RUN apt-get -yqq update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq \
-    python3 python3-pip protobuf-compiler
-RUN pip3 install cryptography protobuf~=3.0
-WORKDIR /home
+    wget gnupg \
+    && wget -qO- https://twilio-cli-prod.s3.amazonaws.com/twilio_pub.asc | apt-key add - \
+    && touch /etc/apt/sources.list.d/twilio.list \
+    && echo 'deb https://twilio-cli-prod.s3.amazonaws.com/apt/ /' | tee /etc/apt/sources.list.d/twilio.list \
+    && apt update \
+    && apt install -y twilio
+
+WORKDIR /home/${USERNAME}/
 
 USER $USERNAME
-ENTRYPOINT /home/docker-entrypoint.sh
+
+RUN twilio update \
+  && twilio plugins:install "@twilio/plugin-microvisor@0.3.7"
+
+ENTRYPOINT ./project/docker-entrypoint.sh

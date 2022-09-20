@@ -10,6 +10,12 @@ The sample code toggles GPIO A5, which is the user LED on the Microvisor Nucleo 
 
 ## Build with Docker
 
+If you are running on an architecture other than x86/amd64 (such as a Mac with Apple silicon), you will need to override the platform when running docker.  This is needed for the twilio-cli apt package which is x86 only at this time:
+
+```shell
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+```
+
 Build the image:
 
 ```shell
@@ -19,10 +25,16 @@ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpi
 Run the build:
 
 ```shell
-docker run -it --rm -v $(pwd)/:/home/ --name microvisor-gpio-sample microvisor-gpio-sample-image
+docker run -it --rm -v $(pwd)/:/home/mvisor/project/ --name microvisor-gpio-sample microvisor-gpio-sample-image
 ```
 
 The bundle for submission to Twilio for deployment will be `build/Demo/gpio_toggle_demo.zip`.
+
+Debugging:
+
+```shell
+docker run -it --rm -v $(pwd)/:/home/mvisor/project/ --name microvisor-gpio-sample-debug --entrypoint /bin/bash microvisor-gpio-sample-image
+```
 
 ## Build in Ubuntu
 
@@ -30,6 +42,7 @@ The sample code has the following dependencies:
 
 - `cmake`
 - `gcc-arm-none-eabi` — tested with version 9-2019-q4
+- `twilio` - apt package for twilio-cli, also install plugin: `twilio plugins:install @twilio/plugin-microvisor`
 
 Prepare to build:
 
@@ -51,7 +64,7 @@ Prepare to build:
 
 The deliverable you can provision onto the Microvisor Nucleo Development Board will be built to `build/Demo/gpio_toggle_demo.elf`.
 
-To deploy the build, create a Microvisor application bundle using the [Bundler tool](https://github.com/twilio/twilio-microvisor-tools/). The Bundler repo is included as a submodule of this project.
+To deploy the build, create a Microvisor application bundle using the Twilio CLI bundler command.
 
 ## Updates
 
