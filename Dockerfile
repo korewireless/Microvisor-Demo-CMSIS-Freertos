@@ -8,7 +8,7 @@ RUN useradd -m -u $UID -g $GID -o -s /bin/bash $USERNAME
 # Dependencies for elf generation
 RUN apt-get -yqq update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq \
-    cmake gcc-arm-none-eabi
+    cmake gcc-arm-none-eabi jq
 
 # Twilio CLI for bundle generation via debian package:
 RUN apt-get -yqq update \
@@ -24,7 +24,6 @@ WORKDIR /home/${USERNAME}/
 
 USER $USERNAME
 
-RUN twilio update \
-  && twilio plugins:install "@twilio/plugin-microvisor@0.3.7"
+RUN twilio update && twilio plugins:install "@twilio/plugin-microvisor"
 
 ENTRYPOINT ./project/docker-entrypoint.sh
