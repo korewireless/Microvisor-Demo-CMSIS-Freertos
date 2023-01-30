@@ -125,10 +125,6 @@ int main(void) {
     GPIOTask  = osThreadNew(StartGPIOTask,  NULL, &GPIOTask_attributes);
     DebugTask = osThreadNew(StartDebugTask, NULL, &DebugTask_attributes);
 
-    if (DebugTask == NULL) {
-        printf("DEBUG task null\n");
-    }
-    
     /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
     /* USER CODE END RTOS_THREADS */
