@@ -7,7 +7,7 @@
 #
 # @author    Tony Smith
 # @copyright 2023, Twilio
-# @version   1.8.2
+# @version   1.8.3
 # @license   MIT
 #
 
@@ -23,6 +23,7 @@ do_log=0
 do_build=1
 do_deploy=1
 do_update=1
+do_clean=0
 do_gen_keys=0
 output_mode=text
 mvplg_minor_min="3"
@@ -51,6 +52,7 @@ show_help() {
     echo "                        Must be a pre-generated file if you do not include --genkeys"
     echo "  --deploy / -d         Deploy without a build"
     echo "  --build / -b          Build but do not deploy"
+    echo "  --clean / -c          Clean build folder first"
     echo "  --logonly             Start log streaming immediately; do not build or deploy"
     echo "  --output / -o {mode}  Log output mode: \`text\` or \`json\`"
     echo "  --help / -h           Show this help screen"
@@ -69,13 +71,8 @@ stream_log() {
 set_keys() {
     echo -e "Generating Remote Debugging keys..."
     # Check for passed directories
-    if [[ -d "${private_key_path}" ]]; then
-        private_key_path="${private_key_path}/debug_auth_prv_key.pem"
-    fi
-
-    if [[ -d "${public_key_path}" ]]; then
-        public_key_path="${public_key_path}/debug_auth_pub_key.pem"
-    fi
+    [[ -d "${private_key_path}" ]] && private_key_path="${private_key_path}/debug_auth_prv_key.pem"
+    [[ -d "${public_key_path}" ]] && public_key_path="${public_key_path}/debug_auth_pub_key.pem"
 
     # Generate the keys using the Twilio CLI Microvisor plugin
     if twilio microvisor:debug:generate_keypair --debug-auth-privkey="${private_key_path}" --debug-auth-pubkey="${public_key_path}" --force ; then
@@ -114,11 +111,13 @@ check_prereqs() {
 }
 
 build_app() {
-    # Set up the build
-    cmake -S . -B build
+    # Set up the build if we need to
+    [[ ${do_clean} -eq 1 || ! -d build ]] && cmake -S . -B build
 
     # Build the app itself
-    if cmake --build build --clean-first 2>&1 ; then
+    dc=""
+    [[ ${do_clean} -eq 1 ]] && dc="--clean-first"
+    if cmake --build build ${dc} 2>&1 ; then
         echo "App built"
     else
         show_error_and_exit "Could not build the app"
@@ -186,12 +185,15 @@ for arg in "$@"; do
         do_gen_keys=1
     elif [[ "${check_arg}" = "--deploy" || "${check_arg}" = "-d" ]]; then
         do_build=0
-    # FROM 1.8.2
-    elif [[ "${check_arg}" = "--build" || "${check_arg}" = "-b" ]]; then
-        do_deploy=0
     elif [[ "${check_arg}" = "--help" || "${check_arg}" = "-h" ]]; then
         show_help
         exit 0
+    # FROM 1.8.2
+    elif [[ "${check_arg}" = "--build" || "${check_arg}" = "-b" ]]; then
+        do_deploy=0
+    # FROM 1.8.3
+    elif [[ "${check_arg}" = "--clean" || "${check_arg}" = "-c" ]]; then
+        do_clean=1
     elif [[ "${arg:0:1}" = "-" ]]; then
         show_error_and_exit "Unknown command: ${arg}"
     else
