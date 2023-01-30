@@ -36,7 +36,7 @@ Under Docker, the demo is compiled, uploaded and deployed to your development bo
 
 ## Build in Ubuntu
 
-### Libraries and Tools
+### Install Libraries and Tools
 
 Under Ubuntu, run the following:
 
@@ -83,11 +83,9 @@ Enter the following command to get your target device’s SID and, if set, its u
 twilio api:microvisor:v1:devices:list
 ```
 
-It is also accessible via the QR code on the back of your development board.
+It is also accessible via the QR code on the back of your development board. Scan the code with your mobile phone and a suitable app, and the board’s SID is the third `/`-separated field.
 
 ### Build and Deploy the Demo
-
-Run:
 
 ```bash
 ./deploy.sh --log
@@ -99,7 +97,7 @@ The `--log` flag initiates log-streaming.
 
 #### View Log Output
 
-You can start log streaming separately with this command:
+You can start log streaming without first building and/or deploying new code with this command:
 
 ```bash
 ./deploy.sh --logonly
@@ -117,7 +115,7 @@ You can deploy the most recent build with this command:
 ./deploy.sh -d
 ```
 
-For more information, run
+For more information, run:
 
 ```bash
 ./deploy.sh --help
@@ -135,6 +133,10 @@ git submodule update --init --remote --recursive
 ## Support/Feedback
 
 Please contact [Twilio Support](https://support.twilio.com/).
+
+## More Samples
+
+Please see [Microvisor Sample Code](https://www.twilio.com/docs/iot/microvisor/sample-code).
 
 ## Copyright
 

@@ -49,7 +49,7 @@ osThreadId_t DebugTask;
 const osThreadAttr_t DebugTask_attributes = {
     .name = "DebugTask",
     .priority = (osPriority_t)osPriorityNormal,
-    .stack_size = configMINIMAL_STACK_SIZE
+    .stack_size = 5120
 };
 
 /* USER CODE BEGIN PV */
@@ -61,6 +61,8 @@ void        SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void        StartGPIOTask(void *argument);
 void        StartDebugTask(void *argument);
+static void post_log(bool is_err, char* format_string, va_list args);
+static void log_device_info(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -99,6 +101,7 @@ int main(void) {
     MX_GPIO_Init();
     
     /* USER CODE BEGIN 2 */
+    log_device_info();
     /* USER CODE END 2 */
 
     /* Init scheduler */
@@ -225,13 +228,13 @@ void StartGPIOTask(void *argument) {
 void StartDebugTask(void *argument) {
     
     /* USER CODE BEGIN 5 */
-    printf("%s %s\n", APP_NAME, APP_VERSION);
+    //server_log("%s %s", APP_NAME, APP_VERSION);
     unsigned n = 0;
 
     /* Infinite loop */
     for(;;) {
-        printf("Ping %u\n", n);
-        printf("Logging alive\n");
+        server_log("Ping %u", n);
+        server_log("Logging alive");
         n++;
         osDelay(DEBUG_PING_PAUSE_MS);
     }
@@ -267,31 +270,69 @@ void assert_failed(uint8_t *file, uint32_t line) {
 #endif  /* USE_FULL_ASSERT */
 
 /**
- * @brief Wire up the `write(STDOUT_FILENO)` system call, so that `printf()`
- *        works as a logging message generator.
+ * @brief Issue a debug message.
  *
- * @param  file   The log entry -- a C string -- to send.
- * @param  ptr    A pointer to the C string we want to send.
- * @param  length The length of the message.
- *
- * @retval The number of bytes written, or -1 to indicate error.
+ * @param format_string Message string with optional formatting
+ * @param ...           Optional injectable values
  */
-int _write(int file, char *ptr, int length) {
+void server_log(char* format_string, ...) {
     
-    if (file != STDOUT_FILENO) {
-        errno = EBADF;
-        return -1;
+    va_list args;
+    va_start(args, format_string);
+    post_log(false, format_string, args);
+    va_end(args);
+}
+
+
+/**
+ * @brief Issue an error message.
+ *
+ * @param format_string Message string with optional formatting
+ * @param ...           Optional injectable values
+ */
+void server_error(char* format_string, ...) {
+    
+    va_list args;
+    va_start(args, format_string);
+    post_log(true, format_string, args);
+    va_end(args);
+}
+
+
+/**
+ * @brief Issue any log message.
+ *
+ * @param is_err        Is the message an error?
+ * @param format_string Message string with optional formatting
+ * @param args          va_list of args from previous call
+ */
+static void post_log(bool is_err, char* format_string, va_list args) {
+    
+    char buffer[LOG_MESSAGE_MAX_LEN_B] = {0};
+    unsigned int n = 0;
+    
+    if (is_err) {
+        // Write the message type to the message
+        sprintf(buffer, "[ERROR] ");
+        n = 8;
     }
 
-    // Write out the message string. Each time confirm that Microvisor
-    // has accepted the log request.
-    const enum MvStatus status = mvServerLog((const uint8_t*)ptr, length);
-    if (status == MV_STATUS_OKAY) {
-        // Return the number of characters written
-        // out to the channel
-        return length;
-    } else {
-        errno = EIO;
-        return -1;
-    }
+    // Write the formatted text to the message
+    vsnprintf(&buffer[n], sizeof(buffer) - n - 1, format_string, args);
+
+    // Output the message using the system call
+    mvServerLog((const uint8_t*)buffer, (uint16_t)strlen(buffer));
+}
+
+
+/**
+ * @brief Show basic device info.
+ */
+static void log_device_info(void) {
+    
+    uint8_t dev_id[35] = { 0 };
+    mvGetDeviceId(dev_id, 34);
+    server_log("Device: %s", dev_id);
+    server_log("   App: %s %s", APP_NAME, APP_VERSION);
+    server_log(" Build: %i", BUILD_NUM);
 }
