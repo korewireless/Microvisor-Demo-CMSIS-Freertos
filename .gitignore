@@ -3,4 +3,5 @@
 *.d
 *.su
 *.sw[pno]
-build/*
+*build/*
+*.xcworkspace/*
