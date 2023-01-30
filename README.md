@@ -21,24 +21,16 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64
 Build the image:
 
 ```shell
-docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
+docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-freertos-image .
 ```
 
 Run the build:
 
 ```shell
-docker run -it --rm -v $(pwd)/:/home/mvisor/project/ --name microvisor-gpio-sample microvisor-gpio-sample-image
+docker run -it --rm -v $(pwd)/:/home/mvisor/project/ \
+  --env-file env.list \
+  --name microvisor-freertos microvisor-freertos-image
 ```
-
-The bundle for submission to Twilio for deployment will be `build/Demo/gpio_toggle_demo.zip`.
-
-Debugging:
-
-```shell
-docker run -it --rm -v $(pwd)/:/home/mvisor/project/ --name microvisor-gpio-sample-debug --entrypoint /bin/bash microvisor-gpio-sample-image
-```
-
-**Note** You will need to have exported certain environment variables, as [detailed below](#environment-variables).
 
 Under Docker, the demo is compiled, uploaded and deployed to your development board. It also initiates logging — hit <b>ctrl</b>-<b>c</b> to break out to the command prompt.
 
