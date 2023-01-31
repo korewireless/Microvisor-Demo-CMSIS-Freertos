@@ -229,13 +229,11 @@ void StartDebugTask(void *argument) {
     
     /* USER CODE BEGIN 5 */
     //server_log("%s %s", APP_NAME, APP_VERSION);
-    unsigned n = 0;
+    uint32_t count = 0;
 
     /* Infinite loop */
     for(;;) {
-        server_log("Ping %u", n);
-        server_log("Logging alive");
-        n++;
+        server_log("Ping %u", count++);
         osDelay(DEBUG_PING_PAUSE_MS);
     }
     /* USER CODE END 5 */
