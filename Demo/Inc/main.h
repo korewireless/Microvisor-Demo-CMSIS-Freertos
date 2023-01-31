@@ -35,7 +35,7 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 #define     DEBUG_PING_PAUSE_MS         5000
-#define     DEBUG_LED_PAUSE_MS          5000
+#define     DEBUG_LED_PAUSE_MS          1000
 
 #define     LOG_BUFFER_SIZE_B           5120
 #define     LOG_MESSAGE_MAX_LEN_B       1024
