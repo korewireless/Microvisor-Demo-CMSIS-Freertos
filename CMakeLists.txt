@@ -76,7 +76,7 @@ add_library(FreeRTOS STATIC
 )
 
 target_include_directories(FreeRTOS PUBLIC
-    config/
+    Config/
     FreeRTOS-Kernel/include
     FreeRTOS-Kernel/portable/GCC/ARM_CM33_NTZ/non_secure
 )
