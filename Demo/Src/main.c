@@ -309,16 +309,16 @@ void server_error(char* format_string, ...) {
 static void post_log(bool is_err, char* format_string, va_list args) {
     
     char buffer[LOG_MESSAGE_MAX_LEN_B] = {0};
-    unsigned int n = 0;
+    uint32_t buffer_delta = 0;
     
     if (is_err) {
         // Write the message type to the message
         sprintf(buffer, "[ERROR] ");
-        n = 8;
+        buffer_delta = 8;
     }
 
     // Write the formatted text to the message
-    vsnprintf(&buffer[n], sizeof(buffer) - n - 1, format_string, args);
+    vsnprintf(&buffer[buffer_delta], sizeof(buffer) - buffer_delta - 1, format_string, args);
 
     // Output the message using the system call
     mvServerLog((const uint8_t*)buffer, (uint16_t)strlen(buffer));
