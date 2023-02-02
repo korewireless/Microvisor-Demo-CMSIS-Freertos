@@ -7,7 +7,7 @@
 #
 # @author    Tony Smith
 # @copyright 2023, Twilio
-# @version   1.8.3
+# @version   1.8.4
 # @license   MIT
 #
 
@@ -27,7 +27,7 @@ do_clean=0
 do_gen_keys=0
 output_mode=text
 mvplg_minor_min="3"
-mvplg_patch_min="7"
+mvplg_patch_min="8"
 
 # NOTE
 # This script assumes the build directory is called 'build' and exists
@@ -265,7 +265,7 @@ if [[ ${do_deploy} -eq 1 ]]; then
     # Try to upload the bundle
     echo "Uploading ${zip_path}..."
     upload_action=$(twilio microvisor:apps:create "${zip_path}" -o=json)
-    app_sid=$(echo "${upload_action}" | jq -r '.sid')
+    app_sid=$(echo "${upload_action}" | jq '.[0]' | jq -r .sid)
 
     if [[ -z "${app_sid}" || "${app_sid}" == "null" ]]; then
         show_error_and_exit "Could not upload app"
