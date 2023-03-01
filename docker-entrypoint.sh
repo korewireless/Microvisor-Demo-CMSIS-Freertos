@@ -5,4 +5,4 @@ cd $(dirname $0)
 
 [ -d build ] && rm -rf build
 
-./deploy.sh --genkeys --log
+twilio microvisor:deploy . --deviceseid ${MV_DEVICE_SID} --genkeys --log
