@@ -63,7 +63,7 @@ target_link_libraries(ST_Code LINK_PUBLIC
 
 # Build FreeRTOS
 add_library(FreeRTOS STATIC
-    FreeRTOS-Kernel/croutine.c
+    #FreeRTOS-Kernel/croutine.c
     FreeRTOS-Kernel/event_groups.c
     FreeRTOS-Kernel/list.c
     FreeRTOS-Kernel/queue.c
