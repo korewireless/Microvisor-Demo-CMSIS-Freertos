@@ -5,7 +5,7 @@ cd $(dirname $0)
 
 [ -d build ] && rm -rf build
 
-if [[ $1 == "GA_TEST" ]]; then
+if [[ ${MV_GA} == "true" ]]; then
   # Build only
   twilio microvisor:deploy . -b
 else 
