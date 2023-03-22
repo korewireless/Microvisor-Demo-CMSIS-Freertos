@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     env:
-      MV_DEVICE_SID: 'UVecc92c6d80f9563ec576d20fd4cca77d'
       MV_GA: 'true'
     name: Build
     runs-on: ubuntu-latest
@@ -20,7 +19,7 @@ jobs:
     - name: Build docker image
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
-      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --name microvisor-gpio-sample microvisor-gpio-sample-image
+      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env $MV_GA --name microvisor-gpio-sample microvisor-gpio-sample-image
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
