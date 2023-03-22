@@ -5,4 +5,10 @@ cd $(dirname $0)
 
 [ -d build ] && rm -rf build
 
-twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} --genkeys --log
+if [[ $1 == "GA_TEST" ]]; then
+  # Build only
+  twilio microvisor:deploy . -b
+else 
+  # Build and deploy -- requires env vars for device SID and Twilio creds to be set
+  twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} --genkeys --log
+fi
