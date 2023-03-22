@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     env:
-      MV_DEVICE_SID: 'UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+      MV_DEVICE_SID: 'UVecc92c6d80f9563ec576d20fd4cca77d'
       MV_GA: 'true'
     name: Build
     runs-on: ubuntu-latest
