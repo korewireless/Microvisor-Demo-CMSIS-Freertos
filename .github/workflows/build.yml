@@ -9,8 +9,7 @@ jobs:
   build:
     env:
       MV_DEVICE_SID: 'UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      TWILIO_ACCOUNT_SID: 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      TWILIO_AUTH_TOKEN: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+      MV_GA: 'true'
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -21,8 +20,6 @@ jobs:
     - name: Build docker image
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
-      args:
-        - GA_TEST
       run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --name microvisor-gpio-sample microvisor-gpio-sample-image
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
