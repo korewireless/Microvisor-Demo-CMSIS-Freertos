@@ -4,17 +4,6 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 /* USER CODE END Header */
 
@@ -52,15 +41,15 @@
 osThreadId_t GPIOTask;
 const osThreadAttr_t GPIOTask_attributes = {
     .name = "GPIOTask",
-    .priority = (osPriority_t) osPriorityNormal,
-    .stack_size = 1024
+    .priority = (osPriority_t)osPriorityNormal,
+    .stack_size = configMINIMAL_STACK_SIZE
 };
 
 osThreadId_t DebugTask;
 const osThreadAttr_t DebugTask_attributes = {
     .name = "DebugTask",
-    .priority = (osPriority_t) osPriorityNormal,
-    .stack_size = 1024
+    .priority = (osPriority_t)osPriorityNormal,
+    .stack_size = 5120
 };
 
 /* USER CODE BEGIN PV */
@@ -68,10 +57,12 @@ const osThreadAttr_t DebugTask_attributes = {
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
+void        SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-void StartGPIOTask(void *argument);
-void StartDebugTask(void *argument);
+void        StartGPIOTask(void *argument);
+void        StartDebugTask(void *argument);
+static void post_log(bool is_err, char* format_string, va_list args);
+static void log_device_info(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -85,10 +76,10 @@ void StartDebugTask(void *argument);
   * @brief  The application entry point.
   * @retval int
   */
-int main(void)
-{
+int main(void) {
+    
     /* USER CODE BEGIN 1 */
-    static uint8_t buffer[4096] __attribute__ ((aligned(512)));
+    static uint8_t buffer[LOG_BUFFER_SIZE_B] __attribute__ ((aligned(512)));
     mvServerLoggingInit(buffer, sizeof(buffer));
     /* USER CODE END 1 */
 
@@ -104,13 +95,13 @@ int main(void)
     SystemClock_Config();
 
     /* USER CODE BEGIN SysInit */
-
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
+    
     /* USER CODE BEGIN 2 */
-
+    log_device_info();
     /* USER CODE END 2 */
 
     /* Init scheduler */
@@ -134,7 +125,7 @@ int main(void)
 
     /* Create the thread(s) */
     /* creation of defaultTask */
-    GPIOTask = osThreadNew(StartGPIOTask, NULL, &GPIOTask_attributes);
+    GPIOTask  = osThreadNew(StartGPIOTask,  NULL, &GPIOTask_attributes);
     DebugTask = osThreadNew(StartDebugTask, NULL, &DebugTask_attributes);
 
     /* USER CODE BEGIN RTOS_THREADS */
@@ -148,42 +139,46 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
 
-    while (1)
-    {
+    while (1) {
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
 }
 
-uint32_t SECURE_SystemCoreClockUpdate()
-{
+
+/**
+ * @brief Get the MV clock value.
+ *
+ * @retval The clock value.
+ */
+uint32_t SECURE_SystemCoreClockUpdate() {
+    
     uint32_t clock = 0;
     mvGetHClk(&clock);
     return clock;
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
-void SystemClock_Config(void)
-{
+ * @brief System clock configuration.
+ */
+void SystemClock_Config(void) {
+    
     SystemCoreClockUpdate();
     HAL_InitTick(TICK_INT_PRIORITY);
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
+ * @brief GPIO Initialization Function
+ *
+ * @param None
+ * @retval None
+ */
+static void MX_GPIO_Init(void) {
+    
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
     /* GPIO Ports Clock Enable */
-
     __HAL_RCC_GPIOA_CLK_ENABLE();
 
     /*Configure GPIO pin Output Level */
@@ -198,58 +193,58 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartGPIOTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
+ * @brief  Function implementing the defaultTask thread.
+ *
+ * @param  argument: Not used
+ *
+ * @retval None
+ */
 /* USER CODE END Header_StartDefaultTask */
-void StartGPIOTask(void *argument)
-{
+void StartGPIOTask(void *argument) {
+    
     /* USER CODE BEGIN 5 */
     /* Infinite loop */
-    for(;;)
-    {
+    for(;;) {
+        // Toggle GPIO PA5 -- the NDB's USER LED
         HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-        osDelay(1000);
+        osDelay(DEBUG_LED_PAUSE_MS);
     }
     /* USER CODE END 5 */
 }
 
 /* USER CODE BEGIN Header_StartDebugTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
+ * @brief  Function implementing the defaultTask thread.
+ *
+ * @param  argument: Not used
+ *
+ * @retval None
+ */
 /* USER CODE END Header_StartDefaultTask */
-void StartDebugTask(void *argument)
-{
+void StartDebugTask(void *argument) {
+    
     /* USER CODE BEGIN 5 */
-    printf("Hello, World!\n");
-    unsigned n = 0;
+    //server_log("%s %s", APP_NAME, APP_VERSION);
+    uint32_t count = 0;
 
     /* Infinite loop */
-    for(;;)
-    {
-        printf("Ping %u\n", n);
-        printf("Logging alive\n");
-        n++;
-        osDelay(1000);
+    for(;;) {
+        server_log("Ping %u", count++);
+        osDelay(DEBUG_PING_PAUSE_MS);
     }
     /* USER CODE END 5 */
 }
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
+ * @brief  This function is executed in case of error occurrence.
+ *
+ * @retval None
+ */
+void Error_Handler(void) {
     /* USER CODE BEGIN Error_Handler_Debug */
     /* User can add his own implementation to report the HAL error return state */
 
@@ -264,8 +259,7 @@ void Error_Handler(void)
   * @param  line: assert_param error line source number
   * @retval None
   */
-void assert_failed(uint8_t *file, uint32_t line)
-{
+void assert_failed(uint8_t *file, uint32_t line) {
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
@@ -274,32 +268,69 @@ void assert_failed(uint8_t *file, uint32_t line)
 #endif  /* USE_FULL_ASSERT */
 
 /**
-    Wire up the `write(STDOUT_FILENO)` system call, so that `printf()`
-    works as a logging message generator.
-
-    @param  file    The log entry -- a C string -- to send.
-    @param  ptr     A pointer to the C string we want to send.
-    @param  length  The length of the message.
-
-    @return         The number of bytes written, or -1 to indicate error.
+ * @brief Issue a debug message.
+ *
+ * @param format_string Message string with optional formatting
+ * @param ...           Optional injectable values
  */
-int _write(int file, char *ptr, int length) {
-    if (file != STDOUT_FILENO) {
-        errno = EBADF;
-        return -1;
-    }
-
-    // Write out the message string. Each time confirm that Microvisor
-    // has accepted the log request.
-    const enum MvStatus status = mvServerLog((const uint8_t*)ptr, length);
-    if (status == MV_STATUS_OKAY) {
-        // Return the number of characters written
-        // out to the channel
-        return length;
-    } else {
-        errno = EIO;
-        return -1;
-    }
+void server_log(char* format_string, ...) {
+    
+    va_list args;
+    va_start(args, format_string);
+    post_log(false, format_string, args);
+    va_end(args);
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+/**
+ * @brief Issue an error message.
+ *
+ * @param format_string Message string with optional formatting
+ * @param ...           Optional injectable values
+ */
+void server_error(char* format_string, ...) {
+    
+    va_list args;
+    va_start(args, format_string);
+    post_log(true, format_string, args);
+    va_end(args);
+}
+
+
+/**
+ * @brief Issue any log message.
+ *
+ * @param is_err        Is the message an error?
+ * @param format_string Message string with optional formatting
+ * @param args          va_list of args from previous call
+ */
+static void post_log(bool is_err, char* format_string, va_list args) {
+    
+    char buffer[LOG_MESSAGE_MAX_LEN_B] = {0};
+    uint32_t buffer_delta = 0;
+    
+    if (is_err) {
+        // Write the message type to the message
+        sprintf(buffer, "[ERROR] ");
+        buffer_delta = 8;
+    }
+
+    // Write the formatted text to the message
+    vsnprintf(&buffer[buffer_delta], sizeof(buffer) - buffer_delta - 1, format_string, args);
+
+    // Output the message using the system call
+    mvServerLog((const uint8_t*)buffer, (uint16_t)strlen(buffer));
+}
+
+
+/**
+ * @brief Show basic device info.
+ */
+static void log_device_info(void) {
+    
+    uint8_t dev_id[35] = { 0 };
+    mvGetDeviceId(dev_id, 34);
+    server_log("Device: %s", dev_id);
+    server_log("   App: %s %s", APP_NAME, APP_VERSION);
+    server_log(" Build: %i", BUILD_NUM);
+}

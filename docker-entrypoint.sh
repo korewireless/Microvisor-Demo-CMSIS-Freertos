@@ -3,19 +3,14 @@ set -e
 
 cd $(dirname $0)
 
-if [ -d build ]; then
-  rm -rf build
-fi
+[ -d build ] && rm -rf build
 
-mkdir -p build
-cd build
-cmake ..
-make -j6
+echo ${MV_GA}
 
-ARGS=""
-if [ -f ../debug-public-key.pem ]; then
-  ARGS="${ARGS} --debug-auth-pubkey=../debug-public-key.pem"
+if [[ -n "${MV_GA}" ]]; then
+  # Build only
+  twilio microvisor:deploy . -b
+else 
+  # Build and deploy -- requires env vars for device SID and Twilio creds to be set
+  twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} --genkeys --log
 fi
-twilio microvisor:apps:bundle -l debug ${ARGS} \
-  Demo/gpio_toggle_demo.bin \
-  Demo/gpio_toggle_demo.zip
