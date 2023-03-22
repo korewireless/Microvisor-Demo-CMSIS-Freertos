@@ -7,7 +7,7 @@ cd $(dirname $0)
 
 if [[ ${MV_GA} == "true" ]]; then
   # Build only
-  twilio microvisor:deploy . -b
+  twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} -b
 else 
   # Build and deploy -- requires env vars for device SID and Twilio creds to be set
   twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} --genkeys --log
