@@ -22,12 +22,12 @@ We currently support the following build platforms:
 
 The recommended solution for working with Microvisor on Windows is via [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
 
-You will need Administrator privileges to installing WSL.
+You will need Administrator privileges to install WSL.
 
 ### Install WSL
 
-1. Open an Administrator Powershell instance.
-1. Run: `wsl --install -d --ubuntu`.
+1. Open an Administrator-level Powershell instance.
+1. Run `wsl --install -d ubuntu`.
 1. Open the Ubuntu instance shell from your Start menu and [follow the Ubuntu instructions below](#build-in-ubuntu).
 
 ## Build with Docker
