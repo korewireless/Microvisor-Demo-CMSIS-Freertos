@@ -10,9 +10,29 @@ The `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configuration files are locate
 
 The sample code toggles GPIO PA5, which is the user LED on the [Microvisor Nucleo Development Board](https://www.twilio.com/docs/iot/microvisor/get-started-with-microvisor). It also emits a “ping” to the Microvisor logger once a second.
 
+## Platform Support
+
+We currently support the following build platforms:
+
+* Linux — native development under [Ubuntu 20.0.4](#build-in-ubuntu).
+* Windows — development in [Ubuntu 20.0.4 via Windows Subsystem for Linux 2](#build-under-windows).
+* Mac — development via [Docker container](#build-with-docker).
+
+## Build under Windows
+
+The recommended solution for working with Microvisor on Windows is via [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
+
+You will need Administrator privileges to installing WSL.
+
+### Install WSL
+
+1. Open an Administrator Powershell instance.
+1. Run: `wsl --install -d --ubuntu`.
+1. Open the Ubuntu instance shell from your Start menu and [follow the Ubuntu instructions below](#build-in-ubuntu).
+
 ## Build with Docker
 
-If you are running on an architecture other than x86/amd64 (such as a Mac with Apple silicon), you will need to override the platform when running docker.  This is needed for the twilio-cli apt package which is x86 only at this time:
+If you are running on an architecture other than x86/amd64 (such as a Mac with Apple silicon), you will need to override the platform when running docker. This is needed for the `twilio-cli` `apt` package which is x86 only at this time:
 
 ```shell
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
