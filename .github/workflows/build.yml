@@ -7,8 +7,6 @@ on:
 
 jobs:
   build:
-    env:
-      MV_GA: 'true'
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -19,7 +17,7 @@ jobs:
     - name: Build docker image
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
-      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env MV_GA=$MV_GA --name microvisor-gpio-sample microvisor-gpio-sample-image
+      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env MICROVISOR_FREERTOS_DEMO_GITHUB_ACTION=1 --name microvisor-gpio-sample microvisor-gpio-sample-image
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
