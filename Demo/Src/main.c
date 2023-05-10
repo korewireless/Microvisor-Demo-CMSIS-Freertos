@@ -17,6 +17,8 @@
 #include "cmsis_os.h"
 #include "mv_syscalls.h"
 
+#include "app_version.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -77,7 +79,7 @@ static void log_device_info(void);
   * @retval int
   */
 int main(void) {
-    
+
     /* USER CODE BEGIN 1 */
     static uint8_t buffer[LOG_BUFFER_SIZE_B] __attribute__ ((aligned(512)));
     mvServerLoggingInit(buffer, sizeof(buffer));
@@ -99,7 +101,7 @@ int main(void) {
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    
+
     /* USER CODE BEGIN 2 */
     log_device_info();
     /* USER CODE END 2 */
@@ -153,7 +155,7 @@ int main(void) {
  * @retval The clock value.
  */
 uint32_t SECURE_SystemCoreClockUpdate() {
-    
+
     uint32_t clock = 0;
     mvGetHClk(&clock);
     return clock;
@@ -163,7 +165,7 @@ uint32_t SECURE_SystemCoreClockUpdate() {
  * @brief System clock configuration.
  */
 void SystemClock_Config(void) {
-    
+
     SystemCoreClockUpdate();
     HAL_InitTick(TICK_INT_PRIORITY);
 }
@@ -175,7 +177,7 @@ void SystemClock_Config(void) {
  * @retval None
  */
 static void MX_GPIO_Init(void) {
-    
+
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
     /* GPIO Ports Clock Enable */
@@ -205,7 +207,7 @@ static void MX_GPIO_Init(void) {
  */
 /* USER CODE END Header_StartDefaultTask */
 void StartGPIOTask(void *argument) {
-    
+
     /* USER CODE BEGIN 5 */
     /* Infinite loop */
     for(;;) {
@@ -226,7 +228,7 @@ void StartGPIOTask(void *argument) {
  */
 /* USER CODE END Header_StartDefaultTask */
 void StartDebugTask(void *argument) {
-    
+
     /* USER CODE BEGIN 5 */
     //server_log("%s %s", APP_NAME, APP_VERSION);
     uint32_t count = 0;
@@ -274,7 +276,7 @@ void assert_failed(uint8_t *file, uint32_t line) {
  * @param ...           Optional injectable values
  */
 void server_log(char* format_string, ...) {
-    
+
     va_list args;
     va_start(args, format_string);
     post_log(false, format_string, args);
@@ -289,7 +291,7 @@ void server_log(char* format_string, ...) {
  * @param ...           Optional injectable values
  */
 void server_error(char* format_string, ...) {
-    
+
     va_list args;
     va_start(args, format_string);
     post_log(true, format_string, args);
@@ -305,10 +307,10 @@ void server_error(char* format_string, ...) {
  * @param args          va_list of args from previous call
  */
 static void post_log(bool is_err, char* format_string, va_list args) {
-    
+
     char buffer[LOG_MESSAGE_MAX_LEN_B] = {0};
     uint32_t buffer_delta = 0;
-    
+
     if (is_err) {
         // Write the message type to the message
         sprintf(buffer, "[ERROR] ");
@@ -327,7 +329,7 @@ static void post_log(bool is_err, char* format_string, va_list args) {
  * @brief Show basic device info.
  */
 static void log_device_info(void) {
-    
+
     uint8_t dev_id[35] = { 0 };
     mvGetDeviceId(dev_id, 34);
     server_log("Device: %s", dev_id);

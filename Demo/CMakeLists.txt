@@ -7,10 +7,9 @@ set(BUILD_NUMBER "0")
 
 message("Building ${APP} ${VERSION_NUMBER} build ${BUILD_NUMBER}")
 
-# Make app data available to the compiler
-add_compile_definitions(APP_NAME="${APP}")
-add_compile_definitions(APP_VERSION="${VERSION_NUMBER}")
-add_compile_definitions(BUILD_NUM=${BUILD_NUMBER})
+# Pass in version data
+configure_file(app_version.in app_version.h)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # Compile app source code file(s)
 add_executable(${PROJECT_NAME}
