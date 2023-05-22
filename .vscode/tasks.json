@@ -1,0 +1,59 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start_gdb_server",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "prereqs_check",
+                "generate_keys",
+                "build_app",
+                "deploy_delay",
+                "start_server"
+            ]
+        },
+        {
+            "label": "start_server",
+            "type": "shell",
+            "command": "twilio microvisor:debug $MV_DEVICE_SID $HOME/pvkey.pem",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "shell",
+                "pattern": {
+                    "regexp": "DONT_FIND_PROBEMS"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^GDB server listening",
+                    "endsPattern": "^GDB server listening"
+                }
+            }
+        },
+        {
+            "label": "deploy_delay",
+            "type": "shell",
+            "command": "echo Waiting 30s for app to deploy... && sleep 30",
+            "isBackground": false
+        },
+        {
+            "label": "build_app",
+            "type": "shell",
+            "command": "./deploy.sh --privatekey $HOME/pvkey.pem --publickey $HOME/pukey.pem",
+            "isBackground": false
+        },
+        {
+            "label": "generate_keys",
+            "type": "shell",
+            "command": "twilio microvisor:debug:generate_keypair --debug-auth-privkey $HOME/pvkey.pem --debug-auth-pubkey $HOME/pukey.pem --force",
+            "isBackground": false
+        },
+        {
+            "label": "prereqs_check",
+            "type": "shell",
+            "command": "which twilio > /dev/null 2>&1 && echo $(twilio plugins) | grep microvisor > /dev/null 2>&1",
+            "isBackground": false
+        }
+    ]
+}
+
+
