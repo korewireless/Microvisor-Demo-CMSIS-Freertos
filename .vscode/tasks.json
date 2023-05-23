@@ -38,7 +38,7 @@
         {
             "label": "build_app",
             "type": "shell",
-            "command": "./deploy.sh --privatekey $HOME/pvkey.pem --publickey $HOME/pukey.pem",
+            "command": "twilio microvisor:deploy ${workspaceRoot} --devicesid ${MV_DEVICE_SID} --privatekey $HOME/pvkey.pem --publickey $HOME/pukey.pem",
             "isBackground": false
         },
         {
