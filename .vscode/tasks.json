@@ -20,7 +20,7 @@
             "problemMatcher": {
                 "owner": "shell",
                 "pattern": {
-                    "regexp": "DONT_FIND_PROBEMS"
+                    "regexp": "DONT_FIND_PROBLEMS"
                 },
                 "background": {
                     "activeOnStart": true,
