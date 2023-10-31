@@ -8,21 +8,16 @@
   */
 /* USER CODE END Header */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+
 #ifndef MAIN_H
 #define MAIN_H
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include "stm32u5xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,7 +34,6 @@ extern "C" {
 
 #define     LOG_BUFFER_SIZE_B           5120
 #define     LOG_MESSAGE_MAX_LEN_B       1024
-
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -47,21 +41,21 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/* USER CODE BEGIN EFP */
 void Error_Handler(void);
 void server_log(char* format_string, ...);
 void server_error(char* format_string, ...);
-
-/* USER CODE BEGIN EFP */
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
-
 /* USER CODE END Private defines */
+
 
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif /* MAIN_H */
 

@@ -1,12 +1,12 @@
-# FreeRTOS Microvisor Sample Project
+# Microvisor FreeRTOS Sample Project
 
 This repo provides a basic demonstration of user application firmware based on the [FreeRTOS](https://freertos.org/) real-time operating system and which will run on the “non-secure” side of Microvisor.
 
 The [ARM CMSIS-RTOS API](https://github.com/ARM-software/CMSIS_5) is used an an intermediary between the application and FreeRTOS to make it easier to swap out the RTOS layer for another.
 
-Most of the project files can be found in the [Demo/](Demo/) directory. The [ST_Code/](ST_Code/) directory contains required components that are not part of Twilio Microvisor STM32U5 HAL, which this sample accesses as a submodule. FreeRTOS is also incorporated as a submodule.
+Most of the project files can be found in the [Demo/](Demo/) directory. The [ST_Code/](ST_Code/) directory contains required components that are not part of Microvisor STM32U5 HAL, which this sample accesses as a submodule. FreeRTOS is also incorporated as a submodule.
 
-The `FreeRTOSConfig.h` and `stm32u5xx_hal_conf.h` configuration files are located in the [Config/](Config/) directory.
+The `FreeRTOSConfig.h` configuration files is located in the [Config/](Config/) directory.
 
 The sample code toggles GPIO PA5, which is the user LED on the [Microvisor Nucleo Development Board](https://www.twilio.com/docs/iot/microvisor/get-started-with-microvisor). It also emits a “ping” to the Microvisor logger once a second.
 
@@ -104,7 +104,7 @@ It is also accessible via the QR code on the back of your development board. Sca
 ### Build and Deploy the Demo
 
 ```bash
-cd twilio-microvisor-freertos
+cd Microvisor-Demo-CMSIS-Freertos
 twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} --log
 ```
 
@@ -149,13 +149,13 @@ twilio microvisor:deploy --help
 Update the repo’s submodules to their remotes’ latest commits with:
 
 ```shell
-cd /path/to/twilio-microvisor-freertos
+cd Microvisor-Demo-CMSIS-Freertos
 git submodule update --init --remote --recursive
 ```
 
 ## Support/Feedback
 
-Please contact [Twilio Support](https://support.twilio.com/).
+Please contact [Twilio Support](mailto:support@microvisor.com).
 
 ## More Samples
 
@@ -163,6 +163,6 @@ Please see [Microvisor Sample Code](https://www.twilio.com/docs/iot/microvisor/s
 
 ## Copyright
 
-The sample code is © 2023, Twilio, Inc.
+The sample code is © 2023, KORE Wireless.
 
 FreeRTOS is © 2021, Amazon Web Services, Inc

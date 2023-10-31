@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 # Set project name
-set(PROJECT_NAME "gpio_toggle_demo")
+set(PROJECT_NAME "mv-freertos-cmsis-demo")
 
 # Set to 0 to build without remote debugging enabled
 set(ENABLE_REMOTE_DEBUGGING 1)
