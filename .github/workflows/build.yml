@@ -21,5 +21,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: gpio_toggle_demo
-        path: ${{ github.workspace }}/build/Demo/gpio_toggle_demo.*
+        name: mv-freertos-cmsis-demo
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
