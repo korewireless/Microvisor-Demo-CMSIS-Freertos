@@ -10,7 +10,7 @@
             "preLaunchTask": "start_gdb_server",
             "gdbpath": "/usr/bin/gdb-multiarch",
             "debugger_args": ["-l", "10", "--nx"],
-            "executable": "${workspaceRoot}/build/Demo/gpio_toggle_demo.elf",
+            "executable": "${workspaceRoot}/build/Demo/mv-freertos-cmsis-demo.elf",
             "printCalls": false,
             "valuesFormatting": "parseText",
             "showDevDebugOutput": false,
