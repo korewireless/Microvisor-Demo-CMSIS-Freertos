@@ -15,7 +15,7 @@ The sample code toggles GPIO PA5, which is the user LED on the [Microvisor Nucle
 We currently support the following build platforms:
 
 * Linux — native development under [Ubuntu 20.0.4](#build-in-ubuntu).
-* Windows — development in [Ubuntu 20.0.4 via Windows Subsystem for Linux 2](#build-under-windows).
+* Windows — development in [Ubuntu 20.0.4 via Windows Subsystem for Linux 2](#build-under-windows) or via [Docker container](#build-with-docker).
 * Mac — development via [Docker container](#build-with-docker).
 
 ## Build under Windows
@@ -34,8 +34,16 @@ You will need Administrator privileges to install WSL.
 
 Build the image:
 
+**macOS**
+
 ```shell
 docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-freertos-image .
+```
+
+**Windows**
+
+```shell
+docker build -t microvisor-freertos-image .
 ```
 
 Run the build:
@@ -55,8 +63,8 @@ Under Docker, the demo is compiled, uploaded and deployed to your development bo
 Under Ubuntu, run the following:
 
 ```bash
-sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi \
-  git curl build-essential cmake libsecret-1-dev jq openssl
+sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi git curl \
+   build-essential cmake libsecret-1-dev jq openssl gdb-multiarch
 ```
 
 ### Twilio CLI
@@ -91,26 +99,25 @@ export TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 export MV_DEVICE_SID=UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-You can get the first two from your Twilio Console [account dashboard](https://console.twilio.com/).
+You can get the first two from the Twilio Console [account dashboard](https://console.twilio.com/).
 
-Enter the following command to get your target device’s SID and, if set, its unique name:
-
-```bash
-twilio api:microvisor:v1:devices:list
-```
-
-It is also accessible via the QR code on the back of your development board. Scan the code with your mobile phone and a suitable app, and the board’s SID is the third `/`-separated field.
+The third value cane be found in the [**Iot > Microvisor > Devices** section](https://console.twilio.com/us1/develop/iot/microvisor/devices). It is also accessible via the QR code on the back of your development board. Scan the code with your mobile phone and a suitable app, and the board’s SID is the third `/`-separated field.
 
 ### Build and Deploy the Demo
 
+Run the following commands:
+
 ```bash
+git clone --recurse-submodules https://github.com/korewireless/Microvisor-Demo-CMSIS-Freertos.git
 cd Microvisor-Demo-CMSIS-Freertos
 twilio microvisor:deploy . --devicesid ${MV_DEVICE_SID} --log
 ```
 
 This will compile, bundle and upload the code, and stage it for deployment to your device. If you encounter errors, please check your stored Twilio credentials.
 
-The `--log` flag initiates log-streaming.
+The `--log` flag initiates log-streaming. You will see output like this:
+
+![Build terminal output](/Images/output.png)
 
 #### View Log Output
 
@@ -149,13 +156,12 @@ twilio microvisor:deploy --help
 Update the repo’s submodules to their remotes’ latest commits with:
 
 ```shell
-cd Microvisor-Demo-CMSIS-Freertos
 git submodule update --init --remote --recursive
 ```
 
 ## Support/Feedback
 
-Please contact [Twilio Support](mailto:support@microvisor.com).
+We welcome all inquiries you may have about Microvisor and its implementation, and any support questions that arise once you’ve begun developing with Microvisor. Please [submit your queries via a Twilio Help Center ticket](https://help.twilio.com/submit).
 
 ## More Samples
 
