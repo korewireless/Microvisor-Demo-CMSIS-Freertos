@@ -6,7 +6,7 @@ on:
     - cron: '0 18 * * *'
 
 jobs:
-  build_1:
+  build_linux:
     name: Build Linux
     runs-on: ubuntu-latest
     steps:
@@ -23,19 +23,7 @@ jobs:
       with:
         name: mv-freertos-cmsis-demo
         path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
-  build_2:
-    name: Build Windows
-    runs-on: windows-latest
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v3
-      with:
-        submodules: 'recursive'
-    - name: Build docker image
-      run: docker build -t microvisor-gpio-sample-image .
-    - name: Build code
-      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
-  build_3:
+  build_mac:
     name: Build macOS
     runs-on: macos-latest
     steps:
@@ -50,5 +38,5 @@ jobs:
     - name: Build docker image
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
-      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-imageock
+      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
 
