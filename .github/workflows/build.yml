@@ -44,9 +44,9 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Docker
-      run: brew install --cask docker
+      run: brew install docker colima
     - name: Run Docker
-      run: open /Applications/Docker.app
+      run: colima start
     - name: Build docker image
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
