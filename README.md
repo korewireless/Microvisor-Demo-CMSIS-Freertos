@@ -28,11 +28,44 @@ You will need Administrator privileges to install WSL.
 
 1. Open an Administrator-level Powershell instance.
 1. Run `wsl --install -d ubuntu`.
+1. **Important** Exit Powershell.
 1. Open the Ubuntu instance shell from your Start menu and [follow the Ubuntu instructions below](#build-in-ubuntu).
 
 ## Build with Docker
 
-Build the image:
+### Set Environment Variables
+
+Running the Twilio CLI and the Microvisor Plugin for uploading the built code to the Twilio cloud and subsequent deployment to your Microvisor Nucleo Board uses the following Twilio credentials stored as environment variables:
+
+**macOS**
+
+```shell
+export TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export MV_DEVICE_SID=UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+**Windows Powershell**
+
+```shell
+$env:TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+$env:TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+$env:MV_DEVICE_SID="UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+**Windows Command Prompt**
+
+```shell
+set TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+set TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+set MV_DEVICE_SID=UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+You can get the first two from the [Twilio Console account dashboard](https://console.twilio.com/).
+
+The third value can be found in the [**Iot > Microvisor > Devices** section](https://console.twilio.com/us1/develop/iot/microvisor/devices). It is also accessible via the QR code on the back of your development board. Scan the code with your mobile phone and a suitable app, and the board’s SID is the third `/`-separated field.
+
+### Build the Image
 
 **macOS**
 
@@ -46,7 +79,7 @@ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-fre
 docker build -t microvisor-freertos-image .
 ```
 
-Run the build:
+### Run the Build
 
 ```shell
 docker run -it --rm -v $(pwd)/:/home/mvisor/project/ \
@@ -60,14 +93,14 @@ Under Docker, the demo is compiled, uploaded and deployed to your development bo
 
 ### Install Libraries and Tools
 
-Under Ubuntu, run the following:
+Run:
 
 ```bash
 sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi git curl \
-   build-essential cmake libsecret-1-dev jq openssl gdb-multiarch
+  build-essential cmake libsecret-1-dev jq openssl gdb-multiarch
 ```
 
-### Twilio CLI
+### Install the Twilio CLI
 
 Install the Twilio CLI. This is required to view streamed logs and for remote debugging. You need version 4.0.1 or above.
 
@@ -89,19 +122,19 @@ twilio plugins:install @twilio/plugin-microvisor
 
 The process outlined below requires Plugin 0.3.10 or above.
 
-### Set Environment Variables
+### Log in to Twilio
 
-Running the Twilio CLI and the Microvisor Plugin for uploading the built code to the Twilio cloud and subsequent deployment to your Microvisor Nucleo Board uses the following Twilio credentials stored as environment variables. They should be added to your shell profile:
+Run:
 
-```bash
-export TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-export TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-export MV_DEVICE_SID=UVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```shell
+twilio login
 ```
 
-You can get the first two from the Twilio Console [account dashboard](https://console.twilio.com/).
+Enter your account SID and your account Auth Token - which you can get from the [Twilio Console account dashboard](https://console.twilio.com/) - and provide a name (“shorthand identifier”) for your profile when asked to do so. Now run:
 
-The third value can be found in the [**Iot > Microvisor > Devices** section](https://console.twilio.com/us1/develop/iot/microvisor/devices). It is also accessible via the QR code on the back of your development board. Scan the code with your mobile phone and a suitable app, and the board’s SID is the third `/`-separated field.
+```shell
+twilio profiles:use <YOUR_SHORTHAND_IDENTIFIER>
+```
 
 ### Build and Deploy the Demo
 
@@ -153,7 +186,7 @@ twilio microvisor:deploy --help
 
 ## Repo Updates
 
-Update the repo’s submodules to their remotes’ latest commits with:
+To later update the repo’s submodules to their remotes’ most recent commits, run:
 
 ```shell
 git submodule update --init --remote --recursive
@@ -171,4 +204,4 @@ Please see [Microvisor Sample Code](https://www.twilio.com/docs/iot/microvisor/s
 
 The sample code is © 2023, KORE Wireless.
 
-FreeRTOS is © 2021, Amazon Web Services, Inc
+FreeRTOS is © Amazon Web Services, Inc
