@@ -48,11 +48,9 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Pre-reqs (Brew)
-      run: brew update && brew install cmake curl git jq node bash
+      run: brew install cmake curl bash
     - name: Get Pre-reqs (ARM)
       run: curl https://raw.githubusercontent.com/Homebrew/homebrew-cask/17d156bba668109dcb6bba337a75fcf41be2d71b/Casks/gcc-arm-embedded.rb -o gcc-arm-embedded.rb && brew install --cask gcc-arm-embedded.rb
-    - name: Build docker image
-      run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
       run: cmake -S . -B build && cmake --build build
     - name: Check artefacts
