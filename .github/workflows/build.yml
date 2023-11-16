@@ -32,7 +32,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Docker
-      run: brew install docker colima
+      run: brew install docker
     - name: Run Docker
       run: colima start
     - name: Build docker image
@@ -65,7 +65,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Pre-reqs
-      run: apt install cc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git jq wget
+      run: DEBIAN_FRONTEND=noninteractive && apt-get install -y cc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git jq wget
     - name: Build code
       run: cmake -S . -B build && cmake --build build
     - name: Upload artifacts
