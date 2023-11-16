@@ -39,6 +39,26 @@ jobs:
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
       run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
+  build_win_wsl:
+    name: Build Windows w. WSL
+    runs-on: windows-latest
+    steps:
+    - uses: Vampire/setup-wsl@v2
+      with:
+        distribution: Ubuntu-20.04
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Get Pre-reqs
+      run: DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git jq wget
+    - name: Build code
+      run: cmake -S . -B build && cmake --build build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mv-freertos-cmsis-demo
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
   build_mac_native:
     name: Build macOS w. native tools
     runs-on: macos-latest
