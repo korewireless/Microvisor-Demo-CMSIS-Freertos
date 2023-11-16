@@ -6,8 +6,8 @@ on:
     - cron: '0 18 * * *'
 
 jobs:
-  build_linux:
-    name: Build Linux
+  build_linux_docker:
+    name: Build Linux w. Docker
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
@@ -23,8 +23,8 @@ jobs:
       with:
         name: mv-freertos-cmsis-demo
         path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
-  build_mac:
-    name: Build macOS
+  build_mac_docker:
+    name: Build macOS w. Docker
     runs-on: macos-latest
     steps:
     - name: Check out code
@@ -39,4 +39,21 @@ jobs:
       run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
       run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
-
+  build_mac_native:
+    name: Build macOS w. native tools
+    runs-on: macos-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Get Pre-reqs (Brew)
+      run: brew update && brew install cmake curl git jq node bash
+    - name: Get Pre-reqs (ARM)
+      run: curl https://raw.githubusercontent.com/Homebrew/homebrew-cask/17d156bba668109dcb6bba337a75fcf41be2d71b/Casks/gcc-arm-embedded.rb -o gcc-arm-embedded.rb && brew install --cask gcc-arm-embedded.rb
+    - name: Build docker image
+      run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
+    - name: Build code
+      run: cmake -S . -B build && cmake --build build
+    - name: Check artefacts
+      run: bash -c '[[ -e build/Demo/mv-freertos-cmsis-demo.bin ]] || exit 1'
