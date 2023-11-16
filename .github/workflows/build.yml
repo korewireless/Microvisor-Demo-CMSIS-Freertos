@@ -46,7 +46,8 @@ jobs:
       run:
         shell: wsl-bash {0}
     steps:
-    - uses: Vampire/setup-wsl@v2
+    - name: Get WSL
+      uses: Vampire/setup-wsl@v2
       with:
         distribution: Ubuntu-20.04
     - name: Check out code
@@ -54,7 +55,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Pre-reqs
-      run: DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git jq wget
+      run: DEBIAN_FRONTEND=noninteractive && sudo apt-get update && apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git jq wget
     - name: Build code
       run: cmake -S . -B build && cmake --build build
     - name: Upload artifacts
