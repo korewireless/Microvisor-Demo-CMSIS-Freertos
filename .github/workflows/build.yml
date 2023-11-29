@@ -6,8 +6,8 @@ on:
     - cron: '0 18 * * *'
 
 jobs:
-  build:
-    name: Build
+  build_linux_docker:
+    name: Build on Linux with Docker
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
@@ -22,4 +22,83 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: mv-freertos-cmsis-demo
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+  build_mac_docker:
+    name: Build on macOS with Docker
+    runs-on: macos-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Get Docker
+      run: brew install docker
+    - name: Run Docker
+      run: colima start
+    - name: Build docker image
+      run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
+    - name: Build code
+      run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mv-freertos-cmsis-demo-mac-docker
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+  build_win_wsl:
+    name: Build on Windows with WSL
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: wsl-bash {0}
+    steps:
+    - name: Get WSL
+      uses: Vampire/setup-wsl@v2
+      with:
+        distribution: Ubuntu-20.04
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Get Pre-reqs
+      run: DEBIAN_FRONTEND=noninteractive && sudo apt-get update -qq && apt-get install -yqq gcc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git
+    - name: Build code
+      run: cmake -S . -B build && cmake --build build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mv-freertos-cmsis-demo-win-wsl
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+  build_mac_native:
+    name: Build on macOS with native tools
+    runs-on: macos-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Get Pre-reqs
+      run: curl https://raw.githubusercontent.com/Homebrew/homebrew-cask/17d156bba668109dcb6bba337a75fcf41be2d71b/Casks/gcc-arm-embedded.rb -o gcc-arm-embedded.rb && brew install --cask gcc-arm-embedded.rb
+    - name: Build code
+      run: cmake -S . -B build && cmake --build build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mv-freertos-cmsis-demo-mac-native
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+  build_linux_native:
+    name: Build on Linux with native tools
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Get Pre-reqs
+      run: DEBIAN_FRONTEND=noninteractive && sudo apt-get update -qq && sudo apt-get install -yqq gcc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git
+    - name: Build code
+      run: cmake -S . -B build && cmake --build build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mv-freertos-cmsis-demo-linux-native
         path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
