@@ -69,7 +69,7 @@ jobs:
         name: mv-freertos-cmsis-demo-win-wsl
         path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
   build_mac_native:
-    name: Build on macOS with native tools
+    name: Build on macOS with native tooling
     runs-on: macos-latest
     steps:
     - name: Check out code
@@ -77,7 +77,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Pre-reqs
-      run: curl https://raw.githubusercontent.com/Homebrew/homebrew-cask/17d156bba668109dcb6bba337a75fcf41be2d71b/Casks/gcc-arm-embedded.rb -o gcc-arm-embedded.rb && brew install --cask gcc-arm-embedded.rb
+      run: brew install --cask gcc-arm-embedded
     - name: Build code
       run: cmake -S . -B build && cmake --build build
     - name: Upload artifacts
