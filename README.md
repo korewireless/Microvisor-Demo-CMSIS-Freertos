@@ -202,6 +202,6 @@ Please see [Microvisor Sample Code](https://www.twilio.com/docs/iot/microvisor/s
 
 ## Copyright
 
-The sample code is © 2023, KORE Wireless.
+The sample code is © 2024, KORE Wireless.
 
 FreeRTOS is © Amazon Web Services, Inc
