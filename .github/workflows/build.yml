@@ -25,7 +25,7 @@ jobs:
         path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
   build_mac_docker:
     name: Build on macOS with Docker
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
     - name: Check out code
       uses: actions/checkout@v4
