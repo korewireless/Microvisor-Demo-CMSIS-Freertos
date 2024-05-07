@@ -32,7 +32,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Docker
-      run: brew install docker
+      run: brew install docker colima
     - name: Run Docker
       run: colima start
     - name: Build docker image
