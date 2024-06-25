@@ -65,7 +65,7 @@ void        SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void        StartGPIOTask(void *argument);
 void        StartDebugTask(void *argument);
-static void post_log(bool is_err, char* format_string, va_list args);
+static void post_log(bool is_err, const char* format_string, va_list args);
 static void log_device_info(void);
 /* USER CODE END PFP */
 
@@ -277,7 +277,7 @@ void server_error(char* format_string, ...) {
  * @param format_string Message string with optional formatting
  * @param args          va_list of args from previous call
  */
-static void post_log(bool is_err, char* format_string, va_list args) {
+static void post_log(bool is_err, const char* format_string, va_list args) {
 
     char buffer[LOG_MESSAGE_MAX_LEN_B] = {0};
     uint32_t buffer_delta = 0;
