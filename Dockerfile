@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS builder
+FROM ubuntu:22.04 AS builder
 ARG USERNAME=mvisor
 ARG UID=1000
 ARG GID=1000
@@ -19,11 +19,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash
 RUN apt-get update -yqq && DEBIAN_FRONTEND=noninteractive apt-get install -yqq nodejs
+RUN npm install -g twilio-cli
 
 WORKDIR /home/${USERNAME}/
 USER $USERNAME
 
-RUN npm install -g twilio-cli
 RUN twilio plugins:install "@twilio/plugin-microvisor"
 
 ENTRYPOINT ["./project/docker-entrypoint.sh"]
