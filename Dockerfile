@@ -14,8 +14,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0
 # Twilio CLI for bundle generation via npm
 # as a binary debian package is not yet available for Apple Silicon
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-RUN source ~/.bashrc
-RUN nvm install 19
+ENV NVM_DIR=/root/.nvm
+RUN . "${NVM_DIR}/nvm.sh" && nvm install 20
+RUN . "${NVM_DIR}/nvm.sh" && nvm use 20
 RUN npm install -g twilio-cli
 
 WORKDIR /home/${USERNAME}/
