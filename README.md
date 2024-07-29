@@ -4,11 +4,11 @@ This repo provides a basic demonstration of user application firmware based on t
 
 The [ARM CMSIS-RTOS API](https://github.com/ARM-software/CMSIS_5) is used an an intermediary between the application and FreeRTOS to make it easier to swap out the RTOS layer for another.
 
-Most of the project files can be found in the [Demo/](Demo/) directory. The [ST_Code/](ST_Code/) directory contains required components that are not part of Microvisor STM32U5 HAL, which this sample accesses as a submodule. FreeRTOS is also incorporated as a submodule.
+Most of the project files can be found in the [Demo/](Demo/) directory. The [ST_Code/](ST_Code/) directory contains required components that are not part of the [Microvisor STM32U5 HAL](https://github.com/korewireless/Microvisor-HAL-STM32U5), which this sample accesses as a submodule. FreeRTOS is also incorporated as a submodule.
 
 The `FreeRTOSConfig.h` configuration files is located in the [Config/](Config/) directory.
 
-The sample code toggles GPIO PA5, which is the user LED on the [Microvisor Nucleo Development Board](https://www.twilio.com/docs/iot/microvisor/get-started-with-microvisor). It also emits a “ping” to the Microvisor logger once a second.
+The sample code toggles GPIO PA5, which is the user LED on the [Microvisor Nucleo Development Board](https://www.twilio.com/docs/iot/microvisor/get-started-with-microvisor). It also emits a “ping” to the Microvisor device log stream once a second.
 
 ## Platform Support
 
