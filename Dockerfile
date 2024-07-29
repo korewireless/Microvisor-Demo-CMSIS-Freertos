@@ -6,8 +6,10 @@ RUN groupadd -g ${GID} -o ${USERNAME}
 RUN useradd -m -u ${UID} -g ${GID} -o -s /bin/bash ${USERNAME}
 
 # Dependencies for elf generation
-RUN apt-get update -yqq && apt-get install -yqq apt-utils
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq cmake gcc-arm-none-eabi jq curl ca-certificates gnupg
+RUN apt-get update -yqq && apt-get install -yqq apt-utils && apt-get clean
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq \
+  cmake gcc-arm-none-eabi jq curl ca-certificates gnupg \
+  && apt-get clean
 
 # Twilio CLI for bundle generation via npm
 # as a binary debian package is not yet available for Apple Silicon
