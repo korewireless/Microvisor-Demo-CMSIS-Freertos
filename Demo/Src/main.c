@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Microvisor FreeRTOS Demo
  *
@@ -176,7 +176,10 @@ void start_ping_task(void *argument) {
  * @retval None
  */
 void Error_Handler(void) {
-    /* User can add their own implementation to report the HAL error return state */
+
+    /* You can add your own implementation to
+       report the HAL error return state */
+    server_error("STM32 HAL error");
 }
 
 
@@ -257,7 +260,9 @@ static void log_device_info(void) {
  * @param  line: assert_param error line source number
  */
 void assert_failed(uint8_t *file, uint32_t line) {
-  /* User can add their own implementation to report the file name and line number,
-     server_error("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+    /* User can add their own implementation to
+       report the file name and line number */
+    server_error("Wrong parameter value: file %s on line %d\r\n", file, line) */
 }
 #endif  /* USE_FULL_ASSERT */

@@ -1,21 +1,13 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
-
+/*
+ *
+ * Microvisor FreeRTOS Demo
+ *
+ * Copyright © 2024, KORE Wireless
+ * Licence: MIT
+ *
+ */
 #ifndef MAIN_H
 #define MAIN_H
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 #define     PING_PAUSE_MS               5000
@@ -23,6 +15,11 @@ extern "C" {
 
 #define     LOG_BUFFER_SIZE_B           5120
 #define     LOG_MESSAGE_MAX_LEN_B       1024
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 void Error_Handler(void);
