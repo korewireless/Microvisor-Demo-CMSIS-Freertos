@@ -25,6 +25,7 @@ jobs:
   build_mac_docker:
     name: Build on macOS with Docker
     runs-on: macos-13
+    timeout-minutes: 36
     steps:
     - name: Check out code
       uses: actions/checkout@v4
