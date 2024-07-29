@@ -6,17 +6,16 @@ RUN groupadd -g ${GID} -o ${USERNAME}
 RUN useradd -m -u ${UID} -g ${GID} -o -s /bin/bash ${USERNAME}
 
 # Dependencies for elf generation
-RUN apt-get update -yqq && apt-get install -yqq apt-utils && apt-get clean
+RUN apt-get update -yqq && apt-get install -yqq apt-utils
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -o APT::Immediate-Configure=0 -yqq \
-  cmake gcc-arm-none-eabi jq curl ca-certificates gnupg \
-  && apt-get clean
+  cmake gcc-arm-none-eabi jq curl ca-certificates gnupg
 
 # Twilio CLI for bundle generation via npm
 # as a binary debian package is not yet available for Apple Silicon
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-ENV NVM_DIR=/root/.nvm
-RUN . "${NVM_DIR}/nvm.sh" && nvm install 20
-RUN . "${NVM_DIR}/nvm.sh" && nvm use 20
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN apt-get update -yqq && DEBIAN_FRONTEND=noninteractive apt-get install -yqq nodejs
 RUN npm install -g twilio-cli
 
 WORKDIR /home/${USERNAME}/
