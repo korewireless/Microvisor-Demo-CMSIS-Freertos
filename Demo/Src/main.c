@@ -1,14 +1,11 @@
-/* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
-
-/* Includes ------------------------------------------------------------------*/
+ *
+ * Microvisor FreeRTOS Demo
+ *
+ * Copyright © 2024, KORE Wireless
+ * Licence: MIT
+ *
+ */
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -25,66 +22,46 @@
 #include "app_version.h"
 
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-/* USER CODE END Includes */
+/*
+ * PRIVATE FUNCTION PROTOTYPES
+ */
+void        SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+void        start_led_task(void *argument);
+void        start_ping_task(void *argument);
+static void post_log(bool is_err, const char* format_string, va_list args);
+static void log_device_info(void);
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-/* USER CODE END PTD */
 
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-/* USER CODE BEGIN PV */
-osThreadId_t GPIOTask;
-const osThreadAttr_t GPIOTask_attributes = {
-    .name = "GPIOTask",
-    .priority = (osPriority_t)osPriorityNormal,
+/*
+ * GLOBALS
+ */
+osThreadId_t led_task;
+const osThreadAttr_t led_task_attributes = {
+    .name = "LED Task",
+    .priority = osPriorityNormal,
     .stack_size = configMINIMAL_STACK_SIZE
 };
 
-osThreadId_t DebugTask;
-const osThreadAttr_t DebugTask_attributes = {
-    .name = "DebugTask",
-    .priority = (osPriority_t)osPriorityNormal,
+osThreadId_t ping_task;
+const osThreadAttr_t ping_task_attributes = {
+    .name = "PING Task",
+    .priority = osPriorityNormal,
     .stack_size = 5120
 };
-/* USER CODE END PV */
-
-
-/* Private function prototypes -----------------------------------------------*/
-/* USER CODE BEGIN PFP */
-void        SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-void        StartGPIOTask(void *argument);
-void        StartDebugTask(void *argument);
-static void post_log(bool is_err, const char* format_string, va_list args);
-static void log_device_info(void);
-/* USER CODE END PFP */
-
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-/* USER CODE END 0 */
 
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void) {
 
+    // Initialize application logging
     static uint8_t buffer[LOG_BUFFER_SIZE_B] __attribute__ ((aligned(512)));
     mvServerLoggingInit(buffer, sizeof(buffer));
 
-    // Reset of all peripherals, Initializes the Flash interface and the Systick
+    // Reset all peripherals, initialize the Flash interface and the Systick
     HAL_Init();
 
     // Configure the system clock
@@ -99,21 +76,17 @@ int main(void) {
     // Init the RTOS scheduler
     osKernelInitialize();
 
-    /* USER CODE BEGIN RTOS_THREADS */
-    GPIOTask  = osThreadNew(StartGPIOTask,  NULL, &GPIOTask_attributes);
-    DebugTask = osThreadNew(StartDebugTask, NULL, &DebugTask_attributes);
-    /* USER CODE END RTOS_THREADS */
+    // Establish the RTOS threads
+    led_task  = osThreadNew(start_led_task,  NULL, &led_task_attributes);
+    ping_task = osThreadNew(start_ping_task, NULL, &ping_task_attributes);
 
     // Start the RTOS scheduler
     osKernelStart();
 
-    /* We should never get here as control is now taken by the scheduler */
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
+    // We should never get here as control is now taken by the scheduler
     while (1) {
-        // NOP
+        __asm("nop");
     }
-    /* USER CODE END WHILE */
 }
 
 
@@ -149,7 +122,7 @@ void SystemClock_Config(void) {
 static void MX_GPIO_Init(void) {
 
     /* GPIO Ports Clock Enable */
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE()
 
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
@@ -163,81 +136,48 @@ static void MX_GPIO_Init(void) {
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-/* USER CODE BEGIN 4 */
-/* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_StartGPIOTask */
 /**
- * @brief  Function implementing the defaultTask thread.
+ * @brief Function implementing the LED flasher thread.
  *
- * @param  argument: Not used
- *
- * @retval None
+ * @param argument: Not used.
  */
-/* USER CODE END Header_StartDefaultTask */
-void StartGPIOTask(void *argument) {
+void start_led_task(void *argument) {
 
-    /* USER CODE BEGIN 5 */
     /* Infinite loop */
     for(;;) {
         // Toggle GPIO PA5 -- the NDB's USER LED
         HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-        osDelay(DEBUG_LED_PAUSE_MS);
+        osDelay(LED_PAUSE_MS);
     }
-    /* USER CODE END 5 */
 }
 
 
-/* USER CODE BEGIN Header_StartDebugTask */
 /**
- * @brief  Function implementing the defaultTask thread.
+ * @brief  Function implementing the 'ping' logger thread.
  *
- * @param  argument: Not used
- *
- * @retval None
+ * @param  argument: Not used.
  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDebugTask(void *argument) {
+void start_ping_task(void *argument) {
 
-    /* USER CODE BEGIN 5 */
     uint32_t count = 0;
 
     /* Infinite loop */
     for(;;) {
         server_log("Ping %u", count++);
-        osDelay(DEBUG_PING_PAUSE_MS);
+        osDelay(PING_PAUSE_MS);
     }
-    /* USER CODE END 5 */
 }
 
 
 /**
- * @brief  This function is executed if an error occurs.
+ * @brief This HAL-defined function is executed if an error occurs.
  *
  * @retval None
  */
 void Error_Handler(void) {
-    /* USER CODE BEGIN Error_Handler_Debug */
     /* User can add their own implementation to report the HAL error return state */
-    /* USER CODE END Error_Handler_Debug */
 }
-
-
-#ifdef USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line) {
-  /* USER CODE BEGIN 6 */
-  /* User can add their own implementation to report the file name and line number,
-     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif  /* USE_FULL_ASSERT */
 
 
 /**
@@ -246,7 +186,7 @@ void assert_failed(uint8_t *file, uint32_t line) {
  * @param format_string Message string with optional formatting
  * @param ...           Optional injectable values
  */
-void server_log(char* format_string, ...) {
+void server_log(const char* format_string, ...) {
 
     va_list args;
     va_start(args, format_string);
@@ -261,7 +201,7 @@ void server_log(char* format_string, ...) {
  * @param format_string Message string with optional formatting
  * @param ...           Optional injectable values
  */
-void server_error(char* format_string, ...) {
+void server_error(const char* format_string, ...) {
 
     va_list args;
     va_start(args, format_string);
@@ -306,3 +246,18 @@ static void log_device_info(void) {
     server_log("Device: %s", dev_id);
     server_log("App: %s %s (BUILD %i)", APP_NAME, APP_VERSION, BUILD_NUM);
 }
+
+
+#ifdef USE_FULL_ASSERT
+/**
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ *
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ */
+void assert_failed(uint8_t *file, uint32_t line) {
+  /* User can add their own implementation to report the file name and line number,
+     server_error("Wrong parameters value: file %s on line %d\r\n", file, line) */
+}
+#endif  /* USE_FULL_ASSERT */

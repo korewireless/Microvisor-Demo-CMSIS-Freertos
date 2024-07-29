@@ -17,39 +17,17 @@
 extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-/* USER CODE END Includes */
-
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-#define     DEBUG_PING_PAUSE_MS         5000
-#define     DEBUG_LED_PAUSE_MS          1000
+#define     PING_PAUSE_MS               5000
+#define     LED_PAUSE_MS                1000
 
 #define     LOG_BUFFER_SIZE_B           5120
 #define     LOG_MESSAGE_MAX_LEN_B       1024
-/* USER CODE END EC */
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-/* USER CODE END EM */
 
-/* Exported functions prototypes ---------------------------------------------*/
-/* USER CODE BEGIN EFP */
 void Error_Handler(void);
-void server_log(char* format_string, ...);
-void server_error(char* format_string, ...);
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private defines */
-/* USER CODE END Private defines */
+void server_log(const char* format_string, ...);
+void server_error(const char* format_string, ...);
 
 
 #ifdef __cplusplus
