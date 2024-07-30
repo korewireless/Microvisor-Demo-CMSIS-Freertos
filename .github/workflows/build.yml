@@ -32,9 +32,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Get Docker
-      run: brew install docker colima docker-buildx && \
-        mkdir -p ~/.docker/cli-plugins && \
-        ln -sfn $(which docker-buildx) ~/.docker/cli-plugins/docker-buildx
+      run: brew install docker colima docker-buildx && mkdir -p ~/.docker/cli-plugins && ln -sfn $(which docker-buildx) ~/.docker/cli-plugins/docker-buildx
     - name: Run Docker
       run: colima start
     - name: Build docker image
