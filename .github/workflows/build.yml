@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 18 * * *'
-
 jobs:
   build_linux_docker:
     name: Build on Linux with Docker
@@ -26,17 +25,20 @@ jobs:
   build_mac_docker:
     name: Build on macOS with Docker
     runs-on: macos-13
+    timeout-minutes: 42
     steps:
     - name: Check out code
       uses: actions/checkout@v4
       with:
         submodules: 'recursive'
     - name: Get Docker
-      run: brew install docker colima
+      run: brew install docker colima docker-buildx && \
+        mkdir -p ~/.docker/cli-plugins && \
+        ln -sfn $(which docker-buildx) ~/.docker/cli-plugins/docker-buildx
     - name: Run Docker
       run: colima start
     - name: Build docker image
-      run: docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
+      run: docker buildx build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build code
       run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
     - name: Upload artifacts
