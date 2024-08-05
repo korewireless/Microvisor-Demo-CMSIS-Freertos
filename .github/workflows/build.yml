@@ -39,7 +39,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mv-freertos-cmsis-demo
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-linux-docker.*
         if-no-files-found: error
   build_win_wsl:
     name: Build on Windows with WSL
@@ -64,7 +64,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mv-freertos-cmsis-demo-win-wsl
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-win-wsl.*
         if-no-files-found: error
   build_mac_native:
     name: Build on macOS with native tooling
@@ -82,7 +82,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mv-freertos-cmsis-demo-mac-native
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-macos.*
         if-no-files-found: error
   build_mac_docker:
     name: Build on macOS with Docker
@@ -105,5 +105,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mv-freertos-cmsis-demo-mac-docker
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-macos-docker.*
         if-no-files-found: error
