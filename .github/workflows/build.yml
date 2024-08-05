@@ -20,7 +20,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: mv-freertos-cmsis-demo-linux-native
+        name: mv-freertos-cmsis-demo
         path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
         if-no-files-found: error
   build_linux_docker:
@@ -35,13 +35,11 @@ jobs:
       run: docker buildx build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t microvisor-gpio-sample-image .
     - name: Build application code
       run: docker run --rm -v $(pwd)/:/home/mvisor/project/ --env BUILD_ONLY=true --name microvisor-gpio-sample microvisor-gpio-sample-image
-    - name: Rename files
-      run: ${{ github.workspace }}/rename.sh ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-linux-docker
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: mv-freertos-cmsis-demo
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-linux-docker.*
+        name: mv-freertos-cmsis-demo-linux-docker
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
         if-no-files-found: error
   build_win_wsl:
     name: Build on Windows with WSL
@@ -62,13 +60,11 @@ jobs:
       run: DEBIAN_FRONTEND=noninteractive && sudo apt-get update -qq && apt-get install -yqq gcc-arm-none-eabi binutils-arm-none-eabi build-essential libsecret-1-dev cmake curl git
     - name: Build code
       run: cmake -S . -B build && cmake --build build
-    - name: Rename files
-      run: ${{ github.workspace }}/rename.sh ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-win-wsl
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: mv-freertos-cmsis-demo-win-wsl
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-win-wsl.*
+        name: mv-freertos-cmsis-demo-windows-wsl
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
         if-no-files-found: error
   build_mac_native:
     name: Build on macOS with native tooling
@@ -82,13 +78,11 @@ jobs:
       run: brew install --cask gcc-arm-embedded
     - name: Build code
       run: cmake -S . -B build && cmake --build build
-    - name: Rename files
-      run: ${{ github.workspace }}/rename.sh ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-macos
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: mv-freertos-cmsis-demo-mac-native
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-macos.*
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
         if-no-files-found: error
   build_mac_docker:
     name: Build on macOS with Docker
@@ -113,5 +107,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mv-freertos-cmsis-demo-mac-docker
-        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo-macos-docker.*
+        path: ${{ github.workspace }}/build/Demo/mv-freertos-cmsis-demo.*
         if-no-files-found: error
